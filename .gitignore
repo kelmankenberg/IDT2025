@@ -1,0 +1,14 @@
+﻿# Ignore Visual Studio temporary files, build results, and
+# user-specific files
+.vs/
+bin/
+obj/
+
+# Ignore additional folders that may also contain transient data
+*.user
+*.suo
+*.userosscache
+*.userprefs
+
+# Ignore package manager folders (for example, NuGet)
+packages/
