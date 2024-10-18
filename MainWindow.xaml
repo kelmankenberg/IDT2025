@@ -207,7 +207,7 @@
                     </Border>
 
                     <!-- Main Content -->
-                    <Border x:Name="MainContentContainer" Grid.Row="3" Grid.ColumnSpan="4" Margin="20,10,0,0">
+                    <Border x:Name="MainContentContainer" Grid.Row="3" Grid.ColumnSpan="5" Margin="10,10,10,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
@@ -219,7 +219,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- #region Content area -->
-                            <ContentControl x:Name="MainContent" Grid.Column="2" Margin="0,0,0,0" />
+                            <ContentControl x:Name="MainContent" Grid.Column="2"/>
                             <!--#endregion-->
                         </Grid>
                     </Border>
