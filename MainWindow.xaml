@@ -105,7 +105,8 @@
                             <Label Content="InfoDev Tools" VerticalAlignment="Center" Foreground="White" FontSize="24" Padding="20,0,20,0" Grid.Column="2"/>
                             <StackPanel x:Name="TopNav" Orientation="Horizontal" HorizontalAlignment="Left" 
                                         VerticalAlignment="Center" Grid.Column="3" Margin="40,0,0,0" Visibility="Collapsed">
-                                <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Dashboard">
+                                <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Dashboard"
+                                        Click="TopNavDashboardButton_Click">
                                     <fa:ImageAwesome Icon="Dashboard" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="PubAssist">
@@ -153,13 +154,13 @@
                             </Grid.ColumnDefinitions>
 
                             <Border x:Name="DashboardIconCell" Style="{StaticResource NavIconCell}" ToolTip="Dashboard"
-                MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown" Grid.Row="0" Grid.Column="0">
+                                    MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown" Grid.Row="0" Grid.Column="0">
                                 <fa:ImageAwesome Icon="Dashboard" Style="{StaticResource NavIcon}"/>
                             </Border>
                             <Border x:Name="DashboardLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="0"
-                MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown">
+                                    MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown">
                                 <Label Content="Dashboard" VerticalAlignment="Center" Style="{StaticResource NavLabel}"
-                   MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown"/>
+                                        MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown"/>
                             </Border>
 
                             <Border x:Name="PubAssistIconCell" Style="{StaticResource NavIconCell}" Grid.Row="1" Grid.Column="0" ToolTip="PubAssist">

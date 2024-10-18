@@ -131,6 +131,11 @@ namespace IDT2025
             MainContent.Content = new Dashboard();
         }
 
+        private void TopNavDashboardButton_Click(object sender, RoutedEventArgs e)
+        {
+            DashboardIconCell_MouseLeftButtonDown(DashboardIconCell, null);
+        }
+
         private void SetNavLabelCellVisibility(Visibility visibility)
         {
             var navLabelCellStyle = FindResource("NavLabelCell") as Style;
