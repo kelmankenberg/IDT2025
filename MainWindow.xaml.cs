@@ -31,6 +31,114 @@ namespace IDT2025
             _vpnCheckTimer.Interval = TimeSpan.FromSeconds(10); // Check every 10 seconds
             _vpnCheckTimer.Tick += VpnCheckTimer_Tick;
             _vpnCheckTimer.Start();
+
+
+            LoadUserSettings();
+
+            LoadDashboard();
+        }
+
+        private void ApplyToggleState(int state)
+        {
+            var DashboardLabelCell = MainGrid.FindName("DashboardLabelCell") as Border;
+            var PubAssistLabelCell = MainGrid.FindName("PubAssistLabelCell") as Border;
+            var SingleFileLabelCell = MainGrid.FindName("SingleFileLabelCell") as Border;
+            var EditorLabelCell = MainGrid.FindName("EditorLabelCell") as Border;
+            var SettingsLabelCell = MainGrid.FindName("SettingsLabelCell") as Border;
+            var VpnLabelCell = MainGrid.FindName("VpnLabelCell") as Border;
+
+            switch (state)
+            {
+                case 0:
+                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Visible;
+                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Visible;
+                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Visible;
+                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Visible;
+                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Visible;
+                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Visible;
+
+                    DashboardIconCell.Visibility = Visibility.Visible;
+                    PubAssistIconCell.Visibility = Visibility.Visible;
+                    SingleFileIconCell.Visibility = Visibility.Visible;
+                    EditorIconCell.Visibility = Visibility.Visible;
+                    SettingsIconCell.Visibility = Visibility.Visible;
+                    VpnIconCell.Visibility = Visibility.Visible;
+
+                    TopNav.Visibility = Visibility.Collapsed;
+
+                    // Adjust MainContent margin
+                    MainContent.Margin = new Thickness(20, 0, 0, 0); // Adjust the left margin as needed
+                    break;
+
+                case 1:
+                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
+                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
+                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
+                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Collapsed;
+                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Collapsed;
+                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Collapsed;
+
+                    DashboardIconCell.Visibility = Visibility.Visible;
+                    PubAssistIconCell.Visibility = Visibility.Visible;
+                    SingleFileIconCell.Visibility = Visibility.Visible;
+                    EditorIconCell.Visibility = Visibility.Visible;
+                    SettingsIconCell.Visibility = Visibility.Visible;
+                    VpnIconCell.Visibility = Visibility.Visible;
+
+                    TopNav.Visibility = Visibility.Collapsed;
+
+                    // Adjust MainContent margin
+                    MainContent.Margin = new Thickness(-(SidebarWidth) + 20, 0, 0, 0); // Adjust the left margin as needed
+                    break;
+                case 2:
+                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
+                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
+                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
+                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Collapsed;
+                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Collapsed;
+                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Collapsed;
+
+                    DashboardIconCell.Visibility = Visibility.Collapsed;
+                    PubAssistIconCell.Visibility = Visibility.Collapsed;
+                    SingleFileIconCell.Visibility = Visibility.Collapsed;
+                    EditorIconCell.Visibility = Visibility.Collapsed;
+                    SettingsIconCell.Visibility = Visibility.Collapsed;
+                    VpnIconCell.Visibility = Visibility.Collapsed;
+
+                    TopNav.Visibility = Visibility.Visible;
+
+                    // Adjust MainContent margin
+                    MainContent.Margin = new Thickness(-200, 0, 0, 0); // Adjust the left margin as needed
+                    break;
+            }
+        }
+
+        private void LoadUserSettings()
+        {
+            // Load settings
+            string userName = Properties.Settings.Default.UserName;
+            toggleState = Properties.Settings.Default.SidebarToggleState; // Load the sidebar toggle state
+            ApplyToggleState(toggleState); // Apply the loaded toggle state
+        }
+
+        private void SaveUserSettings()
+        {
+            // Modify settings
+            Properties.Settings.Default.UserName = "NewUserName";
+            Properties.Settings.Default.SidebarToggleState = toggleState; // Save the sidebar toggle state
+                                                                          // Save settings
+            Properties.Settings.Default.Save();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Save settings when the window is closing
+            SaveUserSettings();
+        }
+
+        private void LoadDashboard()
+        {
+            MainContent.Content = new Dashboard();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -123,77 +231,9 @@ namespace IDT2025
             toggleState = (toggleState + 1) % 3;
             Debug.WriteLine($"Toggle state changed to {toggleState}");
 
-            var DashboardLabelCell = MainGrid.FindName("DashboardLabelCell") as Border;
-            var PubAssistLabelCell = MainGrid.FindName("PubAssistLabelCell") as Border;
-            var SingleFileLabelCell = MainGrid.FindName("SingleFileLabelCell") as Border;
-            var EditorLabelCell = MainGrid.FindName("EditorLabelCell") as Border;
-            var SettingsLabelCell = MainGrid.FindName("SettingsLabelCell") as Border;
-            var VpnLabelCell = MainGrid.FindName("VpnLabelCell") as Border;
+            ApplyToggleState(toggleState);
 
-            switch (toggleState)
-            {
-                case 0:
-                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Visible;
-                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Visible;
-                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Visible;
-                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Visible;
-                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Visible;
-                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Visible;
-
-                    DashboardIconCell.Visibility = Visibility.Visible;
-                    PubAssistIconCell.Visibility = Visibility.Visible;
-                    SingleFileIconCell.Visibility = Visibility.Visible;
-                    EditorIconCell.Visibility = Visibility.Visible;
-                    SettingsIconCell.Visibility = Visibility.Visible;
-                    VpnIconCell.Visibility = Visibility.Visible;
-
-                    TopNav.Visibility = Visibility.Collapsed;
-
-                    // Adjust MainContent margin
-                    MainContent.Margin = new Thickness(20, 0, 0, 0); // Adjust the left margin as needed
-                    break;
-
-                case 1:
-                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
-                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
-                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
-                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Collapsed;
-                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Collapsed;
-                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Collapsed;
-
-                    DashboardIconCell.Visibility = Visibility.Visible;
-                    PubAssistIconCell.Visibility = Visibility.Visible;
-                    SingleFileIconCell.Visibility = Visibility.Visible;
-                    EditorIconCell.Visibility = Visibility.Visible;
-                    SettingsIconCell.Visibility = Visibility.Visible;
-                    VpnIconCell.Visibility = Visibility.Visible;
-
-                    TopNav.Visibility = Visibility.Collapsed;
-
-                    // Adjust MainContent margin
-                    MainContent.Margin = new Thickness(-(SidebarWidth) + 20, 0, 0, 0); // Adjust the left margin as needed
-                    break;
-                case 2:
-                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
-                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
-                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
-                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Collapsed;
-                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Collapsed;
-                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Collapsed;
-
-                    DashboardIconCell.Visibility = Visibility.Collapsed;
-                    PubAssistIconCell.Visibility = Visibility.Collapsed;
-                    SingleFileIconCell.Visibility = Visibility.Collapsed;
-                    EditorIconCell.Visibility = Visibility.Collapsed;
-                    SettingsIconCell.Visibility = Visibility.Collapsed;
-                    VpnIconCell.Visibility = Visibility.Collapsed;
-
-                    TopNav.Visibility = Visibility.Visible;
-
-                    // Adjust MainContent margin
-                    MainContent.Margin = new Thickness(-200, 0, 0, 0); // Adjust the left margin as needed
-                    break;
-            }
+            SaveUserSettings(); // Save the toggle state when it changes
         }
 
         private void DashboardIconCell_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

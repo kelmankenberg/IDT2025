@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Principal;
 using System.Windows;
+using IDT2025.Properties;
 
 namespace IDT2025
 {
@@ -12,8 +13,30 @@ namespace IDT2025
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            UserName = WindowsIdentity.GetCurrent().Name;
-            FirstName = ExtractFirstName(UserName);
+            LoadUserSettings();
+        }
+
+        private void LoadUserSettings()
+        {
+            // Load settings
+            UserName = Settings.Default.UserName;
+            FirstName = Settings.Default.FirstName;
+
+            // If settings are empty, fetch and save them
+            if (string.IsNullOrEmpty(UserName))
+            {
+                UserName = WindowsIdentity.GetCurrent().Name;
+                FirstName = ExtractFirstName(UserName);
+                SaveUserSettings();
+            }
+        }
+
+        private void SaveUserSettings()
+        {
+            // Save settings
+            Settings.Default.UserName = UserName;
+            Settings.Default.FirstName = FirstName;
+            Settings.Default.Save();
         }
 
         private static string ExtractFirstName(string userName)

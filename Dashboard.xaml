@@ -7,7 +7,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Border BorderBrush="White" BorderThickness="2">
         <Grid>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">
+            <TextBlock FontSize="20" Margin="10">
                 <Run Text="Welcome, "/>
                 <Run Text="{Binding FirstName, Mode=OneWay}"/>
                 <Run Text="!"/>
