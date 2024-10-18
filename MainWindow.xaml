@@ -123,7 +123,7 @@
                                     <fa:ImageAwesome Icon="Gears" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,0,0" ToolTip="VPN Status">
-                                    <fa:ImageAwesome Icon="Plug" Style="{StaticResource NavIcon}"/>
+                                    <fa:ImageAwesome x:Name="TopVpnIcon" Icon="Plug" Style="{StaticResource NavIcon}"/>
                                 </Button>
                             </StackPanel>
                             <Button Style="{StaticResource appBtn}" Click="MinimizeButton_Click" Grid.Column="5">

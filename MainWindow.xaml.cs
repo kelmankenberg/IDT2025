@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using FontAwesome.WPF;
+using System.Diagnostics;
 using System.Management;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +13,7 @@ namespace IDT2025
     public partial class MainWindow : Window
     {
         private int toggleState = 0;
-        private const double SidebarWidth = 150; // Adjust this value based on your sidebar width
+        private const double SidebarWidth = 150;
         private MainViewModel _viewModel;
         private DispatcherTimer _vpnCheckTimer;
 
@@ -75,10 +76,15 @@ namespace IDT2025
 
         private void UpdateVpnIconColor(bool isConnected)
         {
-            var vpnIcon = MainGrid.FindName("VpnIcon") as Path;
+            var vpnIcon = MainGrid.FindName("VpnIcon") as ImageAwesome;
+            var topVpnIcon = MainGrid.FindName("TopVpnIcon") as ImageAwesome;
             if (vpnIcon != null)
             {
-                vpnIcon.Fill = isConnected ? Brushes.Green : Brushes.Red;
+                vpnIcon.Foreground = isConnected ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00cc00")) : Brushes.Red;
+            }
+            if (topVpnIcon != null)
+            {
+                topVpnIcon.Foreground = isConnected ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00cc00")) : Brushes.Red;
             }
         }
 
