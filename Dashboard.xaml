@@ -5,13 +5,114 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border BorderBrush="White" BorderThickness="2">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="WelcomeTextColor" Color="White"/>
+        <Style x:Key="DashboardMainContainerStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+        </Style>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style x:Key="CardTitleTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style x:Key="CardContentTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+    </UserControl.Resources>
+    <Border x:Name="DashboardMainContainer" Style="{StaticResource DashboardMainContainerStyle}">
         <Grid>
-            <TextBlock FontSize="20" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="WelcomeText" FontSize="24" Margin="10" 
+                       Foreground="{StaticResource WelcomeTextColor}" Grid.Row="0">
                 <Run Text="Welcome, "/>
                 <Run Text="{Binding FirstName, Mode=OneWay}"/>
-                <Run Text="!"/>
+                <Run Text="! "/>
+                <Run Text="This is your overview as of " FontSize="18"/>
+                <Run Text="{Binding CurrentDate, Mode=OneWay}" FontSize="18"/>
             </TextBlock>
+            <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="CardRow"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border x:Name="Card1" Style="{StaticResource CardStyle}" Grid.Column="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Total number of records" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                    </Grid>
+                </Border>
+                <Border x:Name="Card2" Style="{StaticResource CardStyle}" Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Publications this month" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                    </Grid>
+                </Border>
+                <Border x:Name="Card3" Style="{StaticResource CardStyle}" Grid.Column="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Publications this year" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                    </Grid>
+                </Border>
+                <Border x:Name="Card4" Style="{StaticResource CardStyle}" Grid.Column="3">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Average time to publish (min)" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                    </Grid>
+                </Border>
+                <Border x:Name="Card5" Style="{StaticResource CardStyle}" Grid.Column="4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Longest time to publish (min)" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>
+
