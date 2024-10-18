@@ -110,7 +110,8 @@
                                         Click="TopNavDashboardButton_Click">
                                     <fa:ImageAwesome Icon="Dashboard" Style="{StaticResource NavIcon}"/>
                                 </Button>
-                                <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="PubAssist">
+                                <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="PubAssist"
+                                        Click="TopNavPubAssistButton_Click">
                                     <fa:ImageAwesome Icon="CloudUpload" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Single File">
@@ -137,6 +138,7 @@
                             </Button>
                         </Grid>
                     </Border>
+                    
                     <!-- Sidebar -->
                     <Border x:Name="SidebarContainer" Grid.Row="3" Grid.ColumnSpan="2">
                         <!-- #region Sidebar content -->
@@ -164,10 +166,12 @@
                                         MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown"/>
                             </Border>
 
-                            <Border x:Name="PubAssistIconCell" Style="{StaticResource NavIconCell}" Grid.Row="1" Grid.Column="0" ToolTip="PubAssist">
+                            <Border x:Name="PubAssistIconCell" Style="{StaticResource NavIconCell}" ToolTip="PubAssist"
+                                    MouseLeftButtonDown="PubAssistIconCell_MouseLeftButtonDown" Grid.Row="1" Grid.Column="0" >
                                 <fa:ImageAwesome Icon="CloudUpload" Style="{StaticResource NavIcon}"/>
                             </Border>
-                            <Border x:Name="PubAssistLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="1">
+                            <Border x:Name="PubAssistLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="1"
+                                    MouseLeftButtonDown="PubAssistIconCell_MouseLeftButtonDown" >
                                 <Label Content="PubAssist" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
                             </Border>
 

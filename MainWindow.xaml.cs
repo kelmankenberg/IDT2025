@@ -201,9 +201,19 @@ namespace IDT2025
             MainContent.Content = new Dashboard();
         }
 
+        private void PubAssistIconCell_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MainContent.Content = new PubAssist();
+        }
+
         private void TopNavDashboardButton_Click(object sender, RoutedEventArgs e)
         {
             DashboardIconCell_MouseLeftButtonDown(DashboardIconCell, new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left) { RoutedEvent = UIElement.MouseLeftButtonDownEvent });
+        }
+
+        private void TopNavPubAssistButton_Click(object sender, RoutedEventArgs e)
+        {
+            PubAssistIconCell_MouseLeftButtonDown(PubAssistIconCell, new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left) { RoutedEvent = UIElement.MouseLeftButtonDownEvent });
         }
 
         private void SetNavLabelCellVisibility(Visibility visibility)
