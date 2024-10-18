@@ -14,6 +14,7 @@
         WindowStartupLocation="CenterScreen"
         StateChanged="Window_StateChanged">
     <Window.Resources>
+        <local:VpnStatusToColorConverter x:Key="VpnStatusToColorConverter"/>
         <Style x:Key="appBtn" TargetType="Button">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
@@ -192,7 +193,7 @@
                             </Border>
 
                             <Border x:Name="VpnIconCell" Style="{StaticResource NavIconCell}" Grid.Row="5" Grid.Column="0" ToolTip="VPN Status">
-                                <fa:ImageAwesome Icon="Plug" Style="{StaticResource NavIcon}"/>
+                                <fa:ImageAwesome x:Name="VpnIcon" Icon="Plug" Style="{StaticResource NavIcon}" Foreground="{Binding IsVpnConnected, Converter={StaticResource VpnStatusToColorConverter}}"/>
                             </Border>
                             <Border x:Name="VpnLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="5">
                                 <Label Content="VPN Status" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>

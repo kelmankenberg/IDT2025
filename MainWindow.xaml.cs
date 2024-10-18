@@ -1,7 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Management;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace IDT2025
 {
@@ -9,13 +13,75 @@ namespace IDT2025
     {
         private int toggleState = 0;
         private const double SidebarWidth = 150; // Adjust this value based on your sidebar width
+        private MainViewModel _viewModel;
+        private DispatcherTimer _vpnCheckTimer;
 
         public MainWindow()
         {
             InitializeComponent();
+            _viewModel = new MainViewModel();
+            DataContext = _viewModel;
             // Set the default toggle state to case 0 on startup
             SetInitialToggleState();
+            Loaded += MainWindow_Loaded; // Move this inside the constructor
+
+            // Initialize and start the VPN check timer
+            _vpnCheckTimer = new DispatcherTimer();
+            _vpnCheckTimer.Interval = TimeSpan.FromSeconds(10); // Check every 10 seconds
+            _vpnCheckTimer.Tick += VpnCheckTimer_Tick;
+            _vpnCheckTimer.Start();
         }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            CheckVpnStatus(); // Call CheckVpnStatus when the window is loaded
+        }
+
+        private void VpnCheckTimer_Tick(object sender, EventArgs e)
+        {
+            CheckVpnStatus(); // Periodically check VPN status
+        }
+
+        private void CheckVpnStatus()
+        {
+            bool isConnected = false;
+
+            // Use WMI to check VPN connection status
+            var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionID != NULL");
+            foreach (ManagementObject queryObj in searcher.Get())
+            {
+                var netConnectionId = queryObj["NetConnectionID"]?.ToString();
+                var netConnectionStatus = queryObj["NetConnectionStatus"]?.ToString();
+                var description = queryObj["Description"]?.ToString();
+
+                Debug.WriteLine($"NetConnectionID: {netConnectionId}, NetConnectionStatus: {netConnectionStatus}, Description: {description}");
+
+                // Check for the specific VPN adapter description and ensure the status is connected
+                if (description != null &&
+                    description.Equals("Cisco AnyConnect Virtual Miniport Adapter for Windows x64", StringComparison.OrdinalIgnoreCase) &&
+                    netConnectionStatus == "2")
+                {
+                    isConnected = true;
+                    break;
+                }
+            }
+
+            Debug.WriteLine($"VPN Connected: {isConnected}");
+            _viewModel.IsVpnConnected = isConnected;
+
+            // Update the VPN icon color based on the connection status
+            UpdateVpnIconColor(isConnected);
+        }
+
+        private void UpdateVpnIconColor(bool isConnected)
+        {
+            var vpnIcon = MainGrid.FindName("VpnIcon") as Path;
+            if (vpnIcon != null)
+            {
+                vpnIcon.Fill = isConnected ? Brushes.Green : Brushes.Red;
+            }
+        }
+
 
         private void SetInitialToggleState()
         {
@@ -26,12 +92,12 @@ namespace IDT2025
             var SettingsLabelCell = MainGrid.FindName("SettingsLabelCell") as Border;
             var VpnLabelCell = MainGrid.FindName("VpnLabelCell") as Border;
 
-            DashboardLabelCell.Visibility = Visibility.Visible;
-            PubAssistLabelCell.Visibility = Visibility.Visible;
-            SingleFileLabelCell.Visibility = Visibility.Visible;
-            EditorLabelCell.Visibility = Visibility.Visible;
-            SettingsLabelCell.Visibility = Visibility.Visible;
-            VpnLabelCell.Visibility = Visibility.Visible;
+            if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Visible;
+            if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Visible;
+            if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Visible;
+            if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Visible;
+            if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Visible;
+            if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Visible;
 
             DashboardIconCell.Visibility = Visibility.Visible;
             PubAssistIconCell.Visibility = Visibility.Visible;
@@ -57,18 +123,16 @@ namespace IDT2025
             var EditorLabelCell = MainGrid.FindName("EditorLabelCell") as Border;
             var SettingsLabelCell = MainGrid.FindName("SettingsLabelCell") as Border;
             var VpnLabelCell = MainGrid.FindName("VpnLabelCell") as Border;
-            var IconCellWidth = 50;
-            var NavLabelCellWidth = 150;
 
             switch (toggleState)
             {
                 case 0:
-                    DashboardLabelCell.Visibility = Visibility.Visible;
-                    PubAssistLabelCell.Visibility = Visibility.Visible;
-                    SingleFileLabelCell.Visibility = Visibility.Visible;
-                    EditorLabelCell.Visibility = Visibility.Visible;
-                    SettingsLabelCell.Visibility = Visibility.Visible;
-                    VpnLabelCell.Visibility = Visibility.Visible;
+                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Visible;
+                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Visible;
+                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Visible;
+                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Visible;
+                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Visible;
+                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Visible;
 
                     DashboardIconCell.Visibility = Visibility.Visible;
                     PubAssistIconCell.Visibility = Visibility.Visible;
@@ -84,12 +148,12 @@ namespace IDT2025
                     break;
 
                 case 1:
-                    DashboardLabelCell.Visibility = Visibility.Collapsed;
-                    PubAssistLabelCell.Visibility = Visibility.Collapsed;
-                    SingleFileLabelCell.Visibility = Visibility.Collapsed;
-                    EditorLabelCell.Visibility = Visibility.Collapsed;
-                    SettingsLabelCell.Visibility = Visibility.Collapsed;
-                    VpnLabelCell.Visibility = Visibility.Collapsed;
+                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
+                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
+                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
+                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Collapsed;
+                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Collapsed;
+                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Collapsed;
 
                     DashboardIconCell.Visibility = Visibility.Visible;
                     PubAssistIconCell.Visibility = Visibility.Visible;
@@ -104,12 +168,12 @@ namespace IDT2025
                     MainContent.Margin = new Thickness(-(SidebarWidth) + 20, 0, 0, 0); // Adjust the left margin as needed
                     break;
                 case 2:
-                    DashboardLabelCell.Visibility = Visibility.Collapsed;
-                    PubAssistLabelCell.Visibility = Visibility.Collapsed;
-                    SingleFileLabelCell.Visibility = Visibility.Collapsed;
-                    EditorLabelCell.Visibility = Visibility.Collapsed;
-                    SettingsLabelCell.Visibility = Visibility.Collapsed;
-                    VpnLabelCell.Visibility = Visibility.Collapsed;
+                    if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
+                    if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
+                    if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
+                    if (EditorLabelCell != null) EditorLabelCell.Visibility = Visibility.Collapsed;
+                    if (SettingsLabelCell != null) SettingsLabelCell.Visibility = Visibility.Collapsed;
+                    if (VpnLabelCell != null) VpnLabelCell.Visibility = Visibility.Collapsed;
 
                     DashboardIconCell.Visibility = Visibility.Collapsed;
                     PubAssistIconCell.Visibility = Visibility.Collapsed;
@@ -133,7 +197,7 @@ namespace IDT2025
 
         private void TopNavDashboardButton_Click(object sender, RoutedEventArgs e)
         {
-            DashboardIconCell_MouseLeftButtonDown(DashboardIconCell, null);
+            DashboardIconCell_MouseLeftButtonDown(DashboardIconCell, new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left) { RoutedEvent = UIElement.MouseLeftButtonDownEvent });
         }
 
         private void SetNavLabelCellVisibility(Visibility visibility)
