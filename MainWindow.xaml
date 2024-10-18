@@ -32,7 +32,7 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="NavIconCell" TargetType="Border">
-            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderBrush" Value="#3b4a5e"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="#3b4a5e"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -47,7 +47,7 @@
         </Style>
         <Style x:Key="NavLabelCell" TargetType="Border">
             <Setter Property="Width" Value="150"/>
-            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderBrush" Value="#3b4a5e"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="#171b22"/>
@@ -75,8 +75,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"/>
                         <!-- Title Bar Row -->
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -137,6 +135,71 @@
                             </Button>
                         </Grid>
                     </Border>
+                    <!-- Sidebar -->
+                    <Border x:Name="SidebarContainer" Grid.Row="3" Grid.ColumnSpan="2">
+                        <!-- #region Sidebar content -->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border x:Name="DashboardIconCell" Style="{StaticResource NavIconCell}" ToolTip="Dashboard"
+                MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown" Grid.Row="0" Grid.Column="0">
+                                <fa:ImageAwesome Icon="Dashboard" Style="{StaticResource NavIcon}"/>
+                            </Border>
+                            <Border x:Name="DashboardLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="0"
+                MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown">
+                                <Label Content="Dashboard" VerticalAlignment="Center" Style="{StaticResource NavLabel}"
+                   MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown"/>
+                            </Border>
+
+                            <Border x:Name="PubAssistIconCell" Style="{StaticResource NavIconCell}" Grid.Row="1" Grid.Column="0" ToolTip="PubAssist">
+                                <fa:ImageAwesome Icon="CloudUpload" Style="{StaticResource NavIcon}"/>
+                            </Border>
+                            <Border x:Name="PubAssistLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="1">
+                                <Label Content="PubAssist" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
+                            </Border>
+
+                            <Border x:Name="SingleFileIconCell" Style="{StaticResource NavIconCell}" Grid.Row="2" Grid.Column="0" ToolTip="Single Files">
+                                <fa:ImageAwesome Icon="Upload" Style="{StaticResource NavIcon}"/>
+                            </Border>
+                            <Border x:Name="SingleFileLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="2">
+                                <Label Content="Single File" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
+                            </Border>
+
+                            <Border x:Name="EditorIconCell" Style="{StaticResource NavIconCell}" Grid.Row="3" Grid.Column="0" ToolTip="Editor">
+                                <fa:ImageAwesome Icon="PencilSquare" Style="{StaticResource NavIcon}"/>
+                            </Border>
+                            <Border x:Name="EditorLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="3">
+                                <Label Content="Editor" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
+                            </Border>
+
+                            <Border x:Name="SettingsIconCell" Style="{StaticResource NavIconCell}" Grid.Row="4" Grid.Column="0" ToolTip="Settings">
+                                <fa:ImageAwesome Icon="Gears" Style="{StaticResource NavIcon}"/>
+                            </Border>
+                            <Border x:Name="SettingsLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="4">
+                                <Label Content="Settings" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
+                            </Border>
+
+                            <Border x:Name="VpnIconCell" Style="{StaticResource NavIconCell}" Grid.Row="5" Grid.Column="0" ToolTip="VPN Status">
+                                <fa:ImageAwesome Icon="Plug" Style="{StaticResource NavIcon}"/>
+                            </Border>
+                            <Border x:Name="VpnLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="5">
+                                <Label Content="VPN Status" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
+                            </Border>
+                        </Grid>
+                        <!-- #endregion -->
+                    </Border>
+
                     <!-- Main Content -->
                     <Border x:Name="MainContentContainer" Grid.Row="3" Grid.ColumnSpan="4" Margin="20,0,0,0">
                         <Grid>
@@ -153,53 +216,7 @@
                                 <RowDefinition Height="40" />
                                 <RowDefinition Height="40" />
                             </Grid.RowDefinitions>
-                            <!--#region Sidebar content -->
-                            <Border x:Name="DashboardIconCell" Style="{StaticResource NavIconCell}" ToolTip="Dashboard"
-                                     MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown">
-                                <fa:ImageAwesome Icon="Dashboard" Style="{StaticResource NavIcon}"/>
-                            </Border>
-                            <Border x:Name="DashboardLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1"
-                                    MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown">
-                                <!-- Cell 2 -->
-                                <Label Content="Dashboard" VerticalAlignment="Center" Style="{StaticResource NavLabel}"
-                                       MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown"/>
-                            </Border>
-                            <Border x:Name="PubAssistIconCell" Style="{StaticResource NavIconCell}" Grid.Row="1" ToolTip="PubAssist">
-                                <fa:ImageAwesome Icon="CloudUpload" Style="{StaticResource NavIcon}"/>
-                            </Border>
-                            <Border x:Name="PubAssistLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="1">
-                                <!-- Cell 4 -->
-                                <Label Content="PubAssist" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
-                            </Border>
-                            <Border x:Name="SingleFileIconCell" Style="{StaticResource NavIconCell}" Grid.Row="2" ToolTip="Single Files">
-                                <fa:ImageAwesome Icon="Upload" Style="{StaticResource NavIcon}"/>
-                            </Border>
-                            <Border x:Name="SingleFileLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="2">
-                                <!-- Cell 6 -->
-                                <Label Content="Single File" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
-                            </Border>
-                            <Border x:Name="EditorIconCell" Style="{StaticResource NavIconCell}" Grid.Row="3" ToolTip="Editor">
-                                <fa:ImageAwesome Icon="PencilSquare" Style="{StaticResource NavIcon}"/>
-                            </Border>
-                            <Border x:Name="EditorLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="3">
-                                <!-- Cell 8 -->
-                                <Label Content="Editor" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
-                            </Border>
-                            <Border x:Name="SettingsIconCell" Style="{StaticResource NavIconCell}" Grid.Row="4" ToolTip="Settings">
-                                <fa:ImageAwesome Icon="Gears" Style="{StaticResource NavIcon}"/>
-                            </Border>
-                            <Border x:Name="SettingsLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="4">
-                                <!-- Cell 10 -->
-                                <Label Content="Settings" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
-                            </Border>
-                            <Border x:Name="VpnIconCell" Style="{StaticResource NavIconCell}" Grid.Row="5" ToolTip="VPN Status">
-                                <fa:ImageAwesome Icon="Plug" Style="{StaticResource NavIcon}"/>
-                            </Border>
-                            <Border x:Name="VpnLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="5">
-                                <!-- Cell 12 -->
-                                <Label Content="VPN Status" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
-                            </Border>
-                            <!--#endregion -->
+                            
 
                             <!-- #region Content area -->
                             <ContentControl x:Name="MainContent" Grid.Column="3" Margin="0,0,0,0" />
