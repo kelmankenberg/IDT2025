@@ -16,14 +16,18 @@
         </Style>
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BorderBrush" Value="#7290b7"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
+        <Style x:Key="CardTitlebar" TargetType="Border">
+            <Setter Property="Background" Value="#7290b7"/>
+            <Setter Property="CornerRadius" Value="5,5,0,0"/>
+        </Style>
         <Style x:Key="CardTitleTextStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Margin" Value="0,0,0,5"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -31,9 +35,10 @@
         </Style>
         <Style x:Key="CardContentTextStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="22"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Padding" Value="0,5,0,5"/>
         </Style>
     </UserControl.Resources>
     <Border x:Name="DashboardMainContainer" Style="{StaticResource DashboardMainContainerStyle}">
@@ -50,9 +55,9 @@
                 <Run Text="This is your overview as of " FontSize="18"/>
                 <Run Text="{Binding CurrentDate, Mode=OneWay}" FontSize="18"/>
             </TextBlock>
-            <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True">
+            <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="CardRow"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -62,52 +67,70 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border x:Name="Card1" Style="{StaticResource CardStyle}" Grid.Column="0">
-                    <Grid>
+                    <Grid Margin="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="50"/>
+                            <!-- Fixed height for title bar -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Total number of records" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
+                            <TextBlock Text="Total number of records" Style="{StaticResource CardTitleTextStyle}"/>
+                        </Border>
                         <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card2" Style="{StaticResource CardStyle}" Grid.Column="1">
-                    <Grid>
+                    <Grid Margin="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="50"/>
+                            <!-- Fixed height for title bar -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Publications this month" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
+                            <TextBlock Text="Publications this month" Style="{StaticResource CardTitleTextStyle}"/>
+                        </Border>
                         <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card3" Style="{StaticResource CardStyle}" Grid.Column="2">
-                    <Grid>
+                    <Grid Margin="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="50"/>
+                            <!-- Fixed height for title bar -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Publications this year" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
+                            <TextBlock Text="Publications this year" Style="{StaticResource CardTitleTextStyle}"/>
+                        </Border>
                         <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card4" Style="{StaticResource CardStyle}" Grid.Column="3">
-                    <Grid>
+                    <Grid Margin="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="50"/>
+                            <!-- Fixed height for title bar -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Average time to publish (min)" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
+                            <TextBlock Text="Average time to publish (min)" Style="{StaticResource CardTitleTextStyle}"/>
+                        </Border>
                         <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card5" Style="{StaticResource CardStyle}" Grid.Column="4">
-                    <Grid>
+                    <Grid Margin="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="50"/>
+                            <!-- Fixed height for title bar -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Longest time to publish (min)" Style="{StaticResource CardTitleTextStyle}" Grid.Row="0"/>
+                        <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
+                            <TextBlock Text="Longest time to publish (min)" Style="{StaticResource CardTitleTextStyle}"/>
+                        </Border>
                         <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
@@ -115,4 +138,3 @@
         </Grid>
     </Border>
 </UserControl>
-
