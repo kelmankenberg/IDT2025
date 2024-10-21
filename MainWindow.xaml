@@ -149,6 +149,7 @@
                                 <RowDefinition Height="50"/>
                                 <RowDefinition Height="50"/>
                                 <RowDefinition Height="50"/>
+                                <RowDefinition Height="20"/>
                                 <RowDefinition Height="50"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -196,10 +197,10 @@
                                 <Label Content="Settings" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
                             </Border>
 
-                            <Border x:Name="VpnIconCell" Style="{StaticResource NavIconCell}" Grid.Row="5" Grid.Column="0" ToolTip="VPN Status">
+                            <Border x:Name="VpnIconCell" Style="{StaticResource NavIconCell}" Grid.Row="6" Grid.Column="0" ToolTip="VPN Status" Cursor="Arrow">
                                 <fa:ImageAwesome x:Name="VpnIcon" Icon="Plug" Style="{StaticResource NavIcon}" Foreground="{Binding IsVpnConnected, Converter={StaticResource VpnStatusToColorConverter}}"/>
                             </Border>
-                            <Border x:Name="VpnLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="5">
+                            <Border x:Name="VpnLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="6" Cursor="Arrow">
                                 <Label Content="VPN Status" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
                             </Border>
                         </Grid>
