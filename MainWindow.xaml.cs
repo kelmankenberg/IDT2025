@@ -163,7 +163,7 @@ namespace IDT2025
                 var netConnectionStatus = queryObj["NetConnectionStatus"]?.ToString();
                 var description = queryObj["Description"]?.ToString();
 
-                Debug.WriteLine($"NetConnectionID: {netConnectionId}, NetConnectionStatus: {netConnectionStatus}, Description: {description}");
+                //Debug.WriteLine($"NetConnectionID: {netConnectionId}, NetConnectionStatus: {netConnectionStatus}, Description: {description}");
 
                 // Check for the specific VPN adapter description and ensure the status is connected
                 if (description != null &&
@@ -175,7 +175,7 @@ namespace IDT2025
                 }
             }
 
-            Debug.WriteLine($"VPN Connected: {isConnected}");
+            //Debug.WriteLine($"VPN Connected: {isConnected}");
             _viewModel.IsVpnConnected = isConnected;
 
             // Update the VPN icon color based on the connection status
@@ -229,7 +229,7 @@ namespace IDT2025
         private void NavToggleButton_Click(object sender, RoutedEventArgs e)
         {
             toggleState = (toggleState + 1) % 3;
-            Debug.WriteLine($"Toggle state changed to {toggleState}");
+            //Debug.WriteLine($"Toggle state changed to {toggleState}");
 
             ApplyToggleState(toggleState);
 
@@ -269,11 +269,11 @@ namespace IDT2025
             {
                 if (element is Border border)
                 {
-                    Debug.WriteLine($"Border Name: {border.Name}, Style: {border.Style}");
+                    //Debug.WriteLine($"Border Name: {border.Name}, Style: {border.Style}");
                     if (border.Style == navLabelCellStyle)
                     {
                         border.Visibility = visibility;
-                        Debug.WriteLine($"Set visibility of {border.Name} to {visibility}");
+                        //Debug.WriteLine($"Set visibility of {border.Name} to {visibility}");
                     }
                 }
             }
@@ -292,11 +292,11 @@ namespace IDT2025
             {
                 if (element is Border border)
                 {
-                    Debug.WriteLine($"Border Name: {border.Name}, Style: {border.Style}");
+                    //Debug.WriteLine($"Border Name: {border.Name}, Style: {border.Style}");
                     if (border.Style == navIconCellStyle)
                     {
                         border.Visibility = visibility;
-                        Debug.WriteLine($"Set visibility of {border.Name} to {visibility}");
+                        //Debug.WriteLine($"Set visibility of {border.Name} to {visibility}");
                     }
                 }
             }
@@ -352,7 +352,7 @@ namespace IDT2025
             if (dashboardLabelCell != null)
             {
                 dashboardLabelCell.Visibility = visibility;
-                Debug.WriteLine($"Set visibility of DashboardLabelCell to {visibility}");
+                //Debug.WriteLine($"Set visibility of DashboardLabelCell to {visibility}");
             }
             else
             {

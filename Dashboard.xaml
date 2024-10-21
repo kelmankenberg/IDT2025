@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:IDT2025"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -47,6 +48,26 @@
             <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="Padding" Value="0,5,0,5"/>
         </Style>
+        <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <!--<Setter Property="BorderBrush" Value="#7290b7"/>-->
+            <!--<Setter Property="BorderThickness" Value="1"/>-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#7290b7"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#4a6a8a"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Border x:Name="DashboardMainContainer" Style="{StaticResource DashboardMainContainerStyle}">
         <Grid>
@@ -59,10 +80,10 @@
             </Grid.RowDefinitions>
             <TextBlock x:Name="WelcomeText" FontSize="24" Margin="10" 
                        Foreground="{StaticResource WelcomeTextColor}" Grid.Row="0">
-                <Run Text="Welcome, "/>
+                <Run Text="Welcome,"/>
                 <Run Text="{Binding FirstName, Mode=OneWay}"/>
                 <Run Text="! "/>
-                <Run Text="This is your overview as of " FontSize="18"/>
+                <Run Text="This is your overview as of" FontSize="18"/>
                 <Run Text="{Binding CurrentDate, Mode=OneWay}" FontSize="18"/>
             </TextBlock>
             <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -89,7 +110,7 @@
                         <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
                             <TextBlock Text="Total number of records" Style="{StaticResource CardTitleTextStyle}"/>
                         </Border>
-                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                        <TextBlock x:Name="txtNumberOfRecords" Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card2" Style="{StaticResource CardStyle}" Grid.Column="1">
@@ -102,7 +123,7 @@
                         <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
                             <TextBlock Text="Publications this month" Style="{StaticResource CardTitleTextStyle}"/>
                         </Border>
-                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                        <TextBlock x:Name="txtPubsThisMonth" Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card3" Style="{StaticResource CardStyle}" Grid.Column="2">
@@ -115,7 +136,7 @@
                         <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
                             <TextBlock Text="Publications this year" Style="{StaticResource CardTitleTextStyle}"/>
                         </Border>
-                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                        <TextBlock x:Name="txtPubsThisYear" Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card4" Style="{StaticResource CardStyle}" Grid.Column="3">
@@ -128,7 +149,7 @@
                         <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
                             <TextBlock Text="Average time to publish (min)" Style="{StaticResource CardTitleTextStyle}"/>
                         </Border>
-                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                        <TextBlock x:Name="txtAverageTime" Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="Card5" Style="{StaticResource CardStyle}" Grid.Column="4">
@@ -141,7 +162,7 @@
                         <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
                             <TextBlock Text="Longest time to publish (min)" Style="{StaticResource CardTitleTextStyle}"/>
                         </Border>
-                        <TextBlock Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
+                        <TextBlock x:Name="txtLongestTime" Text="XXX" Style="{StaticResource CardContentTextStyle}" Grid.Row="1"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -154,10 +175,57 @@
                     </Grid.RowDefinitions>
                     <Border Grid.Row="0" Style="{StaticResource CardTitlebar}">
                         <TextBlock Text="Recent Publications" Style="{StaticResource CardTitleTextStyle}" 
-                                   HorizontalAlignment="Left" Margin="10,0,0,0"
+                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"
                                    FontSize="20"/>
                     </Border>
-                    <ListView Grid.Row="1" Background="Transparent"/>
+                    <ListView x:Name="RecentPubsListview" Grid.Row="1" Background="Transparent" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Profile" DisplayMemberBinding="{Binding Profile}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                    <GridViewColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <GridViewColumnHeader Content="Profile" Click="GridViewColumnHeader_Click"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.HeaderTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                    <GridViewColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <GridViewColumnHeader Content="Date" Click="GridViewColumnHeader_Click"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.HeaderTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Server" DisplayMemberBinding="{Binding Server}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                    <GridViewColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <GridViewColumnHeader Content="Server" Click="GridViewColumnHeader_Click"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.HeaderTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Start" DisplayMemberBinding="{Binding Start}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                    <GridViewColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <GridViewColumnHeader Content="Start" Click="GridViewColumnHeader_Click"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.HeaderTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="End" DisplayMemberBinding="{Binding End}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                    <GridViewColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <GridViewColumnHeader Content="End" Click="GridViewColumnHeader_Click"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.HeaderTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Total" DisplayMemberBinding="{Binding Total}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                    <GridViewColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <GridViewColumnHeader Content="Total" Click="GridViewColumnHeader_Click"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.HeaderTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Grid>
             </Border>
         </Grid>
