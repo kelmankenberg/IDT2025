@@ -6,9 +6,53 @@
              xmlns:local="clr-namespace:IDT2025"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border BorderBrush="White" BorderThickness="2">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="HeadingTextColor" Color="White"/>
+        <Style x:Key="PubAssistMainContainerStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+        </Style>
+        <Style x:Key="Titlebar" TargetType="Border">
+            <Setter Property="Background" Value="#7290b7"/>
+        </Style>
+    </UserControl.Resources>
+    <Border x:Name="PubAssistMainContainer" Style="{StaticResource PubAssistMainContainerStyle}">
         <Grid>
-            <Label Content="PubAssist" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="120"/>
+                <!-- Fixed height for card row -->
+                <RowDefinition Height="*"/>
+                <!-- New row for Recent Publications -->
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="HeadingText" FontSize="24" Margin="10" 
+                Foreground="{StaticResource HeadingTextColor}" Grid.Row="0">
+                    <Run Text="PubAssist"/>
+                    <Run Text="       Here you can create, edit and publish content profiles." FontSize="16"/>
+            </TextBlock>
+            
+            <Border Grid.Row="1" CornerRadius="10" BorderBrush="Gray" BorderThickness="1" Margin="10">
+                <StackPanel>
+                    <Border Grid.Row="0" Style="{StaticResource Titlebar}">
+                        <TextBlock Text="Profiles" FontSize="18" FontWeight="Bold" 
+                               Padding="5" Foreground="White"/>
+                    </Border>
+                    <ListView Name="ProfilesListView" Margin="5">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                                <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}" Width="200"/>
+                                <GridViewColumn Header="Server" DisplayMemberBinding="{Binding Server}" Width="200"/>
+                                <GridViewColumn Header="Project" DisplayMemberBinding="{Binding Project}" Width="200"/>
+                                <GridViewColumn Header="Ditamap" DisplayMemberBinding="{Binding Ditamap}" Width="200"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
+            </Border>
         </Grid>
     </Border>
 </UserControl>

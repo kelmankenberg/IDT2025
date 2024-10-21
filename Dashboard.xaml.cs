@@ -21,14 +21,14 @@ namespace IDT2025
 
         private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("GridViewColumnHeader_Click called");
+            // Debug.WriteLine("GridViewColumnHeader_Click called");
 
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
             ListSortDirection direction;
 
             if (headerClicked != null)
             {
-                Debug.WriteLine($"Header clicked: {headerClicked.Content}");
+                // Debug.WriteLine($"Header clicked: {headerClicked.Content}");
 
                 if (headerClicked != _lastHeaderClicked)
                 {
@@ -46,7 +46,7 @@ namespace IDT2025
 
                 if (!string.IsNullOrEmpty(sortBy))
                 {
-                    Debug.WriteLine($"Sorting by: {sortBy}, Direction: {direction}");
+                    // Debug.WriteLine($"Sorting by: {sortBy}, Direction: {direction}");
                     Sort(sortBy, direction);
                     _lastHeaderClicked = headerClicked;
                     _lastDirection = direction;
@@ -56,7 +56,7 @@ namespace IDT2025
 
         private void Sort(string sortBy, ListSortDirection direction)
         {
-            Debug.WriteLine($"Sort called with sortBy: {sortBy}, direction: {direction}");
+            // Debug.WriteLine($"Sort called with sortBy: {sortBy}, direction: {direction}");
 
             ICollectionView dataView = CollectionViewSource.GetDefaultView(RecentPubsListview.ItemsSource);
 
@@ -87,8 +87,8 @@ namespace IDT2025
 
         private async void Dashboard_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine($"Dashboard ActualWidth: {this.ActualWidth}, ActualHeight: {this.ActualHeight}");
-            Debug.WriteLine($"DashboardMainContainer ActualWidth: {DashboardMainContainer.ActualWidth}, ActualHeight: {DashboardMainContainer.ActualHeight}");
+            // Debug.WriteLine($"Dashboard ActualWidth: {this.ActualWidth}, ActualHeight: {this.ActualHeight}");
+            // Debug.WriteLine($"DashboardMainContainer ActualWidth: {DashboardMainContainer.ActualWidth}, ActualHeight: {DashboardMainContainer.ActualHeight}");
 
             await LoadRecentPublicationsAsync();
         }
@@ -100,15 +100,15 @@ namespace IDT2025
 
             try
             {
-                Debug.WriteLine($"Attempting to read file from: {filePath}");
+                // Debug.WriteLine($"Attempting to read file from: {filePath}");
 
                 // Read the file content directly from the file system
                 var response = await File.ReadAllTextAsync(filePath);
-                Debug.WriteLine($"File content: {response}");
+                // Debug.WriteLine($"File content: {response}");
 
                 // Log the JSON content for debugging
-                Debug.WriteLine("JSON Content:");
-                Debug.WriteLine(response);
+                // Debug.WriteLine("JSON Content:");
+                // Debug.WriteLine(response);
 
                 var options = new JsonSerializerOptions
                 {
@@ -120,7 +120,7 @@ namespace IDT2025
 
                 if (recentPublications == null || recentPublications.Count == 0)
                 {
-                    Debug.WriteLine("No data found in the JSON file.");
+                    // Debug.WriteLine("No data found in the JSON file.");
                     txtNumberOfRecords.Text = "0";
                     txtPubsThisMonth.Text = "0";
                     txtAverageTime.Text = "0";
@@ -128,10 +128,10 @@ namespace IDT2025
                 }
                 else
                 {
-                    Debug.WriteLine($"Number of records found: {recentPublications.Count}");
+                    // Debug.WriteLine($"Number of records found: {recentPublications.Count}");
                     foreach (var pub in recentPublications)
                     {
-                        Debug.WriteLine($"Profile: {pub.Profile}, Date: {pub.Date}, Server: {pub.Server}, Start: {pub.Start}, End: {pub.End}, Total: {pub.Total}");
+                        // Debug.WriteLine($"Profile: {pub.Profile}, Date: {pub.Date}, Server: {pub.Server}, Start: {pub.Start}, End: {pub.End}, Total: {pub.Total}");
                     }
 
                     // Update the ListView's ItemsSource
@@ -174,7 +174,7 @@ namespace IDT2025
             }
             catch (FileNotFoundException fileEx)
             {
-                Debug.WriteLine($"File not found: {fileEx.Message}");
+                // Debug.WriteLine($"File not found: {fileEx.Message}");
                 txtNumberOfRecords.Text = "0";
                 txtPubsThisMonth.Text = "0";
                 txtAverageTime.Text = "0";
@@ -182,8 +182,8 @@ namespace IDT2025
             }
             catch (JsonException jsonEx)
             {
-                Debug.WriteLine($"JSON error while deserializing recent publications: {jsonEx.Message}");
-                Debug.WriteLine($"Stack Trace: {jsonEx.StackTrace}");
+                // Debug.WriteLine($"JSON error while deserializing recent publications: {jsonEx.Message}");
+                // Debug.WriteLine($"Stack Trace: {jsonEx.StackTrace}");
                 txtNumberOfRecords.Text = "0";
                 txtPubsThisMonth.Text = "0";
                 txtAverageTime.Text = "0";
@@ -191,7 +191,7 @@ namespace IDT2025
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"General error while loading recent publications: {ex.Message}");
+                // Debug.WriteLine($"General error while loading recent publications: {ex.Message}");
                 txtNumberOfRecords.Text = "0";
                 txtPubsThisMonth.Text = "0";
                 txtAverageTime.Text = "0";
