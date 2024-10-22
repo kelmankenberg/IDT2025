@@ -1,6 +1,7 @@
 ﻿using IDT2025.Models;
 using IDT2025.Properties;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -11,9 +12,22 @@ using System.ComponentModel;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace IDT2025
 {
+    public class RecentPublication
+    {
+        public string Profile { get; set; } = string.Empty;
+        public string Date { get; set; } = string.Empty;
+        public string Server { get; set; } = string.Empty;
+        public string Start { get; set; } = string.Empty;
+        public string End { get; set; } = string.Empty;
+        public double Total { get; set; }
+        public string Owner { get; set; } = string.Empty;
+    }
+
     public partial class Dashboard : UserControl
     {
         private GridViewColumnHeader? _lastHeaderClicked = null;
@@ -21,15 +35,11 @@ namespace IDT2025
 
         private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
         {
-            // Debug.WriteLine("GridViewColumnHeader_Click called");
-
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
             ListSortDirection direction;
 
             if (headerClicked != null)
             {
-                // Debug.WriteLine($"Header clicked: {headerClicked.Content}");
-
                 if (headerClicked != _lastHeaderClicked)
                 {
                     direction = ListSortDirection.Ascending;
@@ -46,7 +56,6 @@ namespace IDT2025
 
                 if (!string.IsNullOrEmpty(sortBy))
                 {
-                    // Debug.WriteLine($"Sorting by: {sortBy}, Direction: {direction}");
                     Sort(sortBy, direction);
                     _lastHeaderClicked = headerClicked;
                     _lastDirection = direction;
@@ -56,8 +65,6 @@ namespace IDT2025
 
         private void Sort(string sortBy, ListSortDirection direction)
         {
-            // Debug.WriteLine($"Sort called with sortBy: {sortBy}, direction: {direction}");
-
             ICollectionView dataView = CollectionViewSource.GetDefaultView(RecentPubsListview.ItemsSource);
 
             dataView.SortDescriptions.Clear();
@@ -65,7 +72,6 @@ namespace IDT2025
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
         }
-
 
         public string FirstName
         {
@@ -87,103 +93,95 @@ namespace IDT2025
 
         private async void Dashboard_Loaded(object sender, RoutedEventArgs e)
         {
-            // Debug.WriteLine($"Dashboard ActualWidth: {this.ActualWidth}, ActualHeight: {this.ActualHeight}");
-            // Debug.WriteLine($"DashboardMainContainer ActualWidth: {DashboardMainContainer.ActualWidth}, ActualHeight: {DashboardMainContainer.ActualHeight}");
-
+            Debug.WriteLine("Dashboard Loaded");
             await LoadRecentPublicationsAsync();
         }
 
         private async Task LoadRecentPublicationsAsync()
         {
-            string fileName = $"{FirstName}_recpubs.json";
-            string filePath = $"\\\\zusscgrcprodwebhelp.file.core.windows.net\\webhelp\\idt\\RecPubs\\{fileName}";
+            // Use a mapped drive path
+            string connectionString = @"Data Source=Y:\idt\InfoDevTools.db;Version=3;";
+            Debug.WriteLine($"Using connection string: {connectionString}");
 
             try
             {
-                // Debug.WriteLine($"Attempting to read file from: {filePath}");
-
-                // Read the file content directly from the file system
-                var response = await File.ReadAllTextAsync(filePath);
-                // Debug.WriteLine($"File content: {response}");
-
-                // Log the JSON content for debugging
-                // Debug.WriteLine("JSON Content:");
-                // Debug.WriteLine(response);
-
-                var options = new JsonSerializerOptions
+                Debug.WriteLine("Opening SQLite connection...");
+                using (var connection = new SQLiteConnection(connectionString))
                 {
-                    PropertyNameCaseInsensitive = true
-                };
+                    await connection.OpenAsync();
+                    Debug.WriteLine("SQLite connection opened.");
 
-                var recentPublicationsWrapper = JsonSerializer.Deserialize<RecentPublicationsWrapper>(response, options);
-                var recentPublications = recentPublicationsWrapper?.Pubs?.Pub;
-
-                if (recentPublications == null || recentPublications.Count == 0)
-                {
-                    // Debug.WriteLine("No data found in the JSON file.");
-                    txtNumberOfRecords.Text = "0";
-                    txtPubsThisMonth.Text = "0";
-                    txtAverageTime.Text = "0";
-                    txtLongestTime.Text = "0";
-                }
-                else
-                {
-                    // Debug.WriteLine($"Number of records found: {recentPublications.Count}");
-                    foreach (var pub in recentPublications)
+                    string query = "SELECT Profile, Date, Server, Start, End, Total, Owner FROM RecentPublications";
+                    using (var command = new SQLiteCommand(query, connection))
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        // Debug.WriteLine($"Profile: {pub.Profile}, Date: {pub.Date}, Server: {pub.Server}, Start: {pub.Start}, End: {pub.End}, Total: {pub.Total}");
-                    }
+                        var recentPublications = new List<RecentPublication>();
+                        Debug.WriteLine("Executing query...");
 
-                    // Update the ListView's ItemsSource
-                    RecentPubsListview.ItemsSource = recentPublications;
-
-                    // Update the txtNumberOfRecords TextBlock with the count of records
-                    txtNumberOfRecords.Text = recentPublications.Count.ToString();
-
-                    // Filter records for the current month
-                    var currentMonth = DateTime.Now.Month;
-                    var currentYear = DateTime.Now.Year;
-                    var pubsThisMonth = recentPublications.Count(pub =>
-                    {
-                        var pubDate = DateTime.Parse(pub.Date);
-                        return pubDate.Month == currentMonth && pubDate.Year == currentYear;
-                    });
-                    var pubsThisYear = recentPublications.Count(pub =>
-                    {
-                        DateTime pubDate;
-                        if (DateTime.TryParse(pub.Date, out pubDate))
+                        while (await reader.ReadAsync())
                         {
-                            return pubDate.Year == currentYear;
+                            var publication = new RecentPublication
+                            {
+                                Profile = reader["Profile"]?.ToString() ?? string.Empty,
+                                Date = reader["Date"]?.ToString() ?? string.Empty,
+                                Server = reader["Server"]?.ToString() ?? string.Empty,
+                                Start = DateTime.Parse(reader["Start"]?.ToString() ?? string.Empty).ToString("HH:mm:ss"),
+                                End = DateTime.Parse(reader["End"]?.ToString() ?? string.Empty).ToString("HH:mm:ss"),
+                                Total = reader["Total"] != DBNull.Value ? Convert.ToDouble(reader["Total"]) : 0,
+                                Owner = reader["Owner"]?.ToString() ?? string.Empty
+                            };
+                            recentPublications.Add(publication);
+                            Debug.WriteLine($"Loaded publication: {publication.Profile}, {publication.Date}");
                         }
-                        return false;
-                    });
 
-                    // Update the txtPubsThisMonth TextBlock with the count of records for the current month
-                    txtPubsThisMonth.Text = pubsThisMonth.ToString();
-                    txtPubsThisYear.Text = pubsThisYear.ToString();
+                        if (recentPublications.Count == 0)
+                        {
+                            Debug.WriteLine("No recent publications found.");
+                            txtNumberOfRecords.Text = "0";
+                            txtPubsThisMonth.Text = "0";
+                            txtAverageTime.Text = "0";
+                            txtLongestTime.Text = "0";
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"Loaded {recentPublications.Count} publications.");
+                            RecentPubsListview.ItemsSource = recentPublications;
+                            txtNumberOfRecords.Text = recentPublications.Count.ToString();
 
-                    // Calculate the average and longest Total time
-                    var totalTimes = recentPublications.Select(pub => double.Parse(pub.Total)).ToList();
-                    var averageTime = totalTimes.Average();
-                    var longestTime = totalTimes.Max();
+                            var currentMonth = DateTime.Now.Month;
+                            var currentYear = DateTime.Now.Year;
+                            var pubsThisMonth = recentPublications.Count(pub =>
+                            {
+                                var pubDate = DateTime.Parse(pub.Date);
+                                return pubDate.Month == currentMonth && pubDate.Year == currentYear;
+                            });
+                            var pubsThisYear = recentPublications.Count(pub =>
+                            {
+                                DateTime pubDate;
+                                if (DateTime.TryParse(pub.Date, out pubDate))
+                                {
+                                    return pubDate.Year == currentYear;
+                                }
+                                return false;
+                            });
 
-                    // Update the txtAverageTime and txtLongestTime TextBlocks
-                    txtAverageTime.Text = averageTime.ToString("F2"); // Format to 2 decimal places
-                    txtLongestTime.Text = longestTime.ToString();
+                            txtPubsThisMonth.Text = pubsThisMonth.ToString();
+                            txtPubsThisYear.Text = pubsThisYear.ToString();
+
+                            var totalTimes = recentPublications.Select(pub => pub.Total).ToList();
+                            var averageTime = totalTimes.Average();
+                            var longestTime = totalTimes.Max();
+
+                            txtAverageTime.Text = averageTime.ToString("F2");
+                            txtLongestTime.Text = longestTime.ToString();
+                        }
+                    }
                 }
             }
-            catch (FileNotFoundException fileEx)
+            catch (SQLiteException sqlEx)
             {
-                // Debug.WriteLine($"File not found: {fileEx.Message}");
-                txtNumberOfRecords.Text = "0";
-                txtPubsThisMonth.Text = "0";
-                txtAverageTime.Text = "0";
-                txtLongestTime.Text = "0";
-            }
-            catch (JsonException jsonEx)
-            {
-                // Debug.WriteLine($"JSON error while deserializing recent publications: {jsonEx.Message}");
-                // Debug.WriteLine($"Stack Trace: {jsonEx.StackTrace}");
+                Debug.WriteLine($"SQLiteException: {sqlEx.Message}");
+                // Handle SQLite exceptions
                 txtNumberOfRecords.Text = "0";
                 txtPubsThisMonth.Text = "0";
                 txtAverageTime.Text = "0";
@@ -191,7 +189,8 @@ namespace IDT2025
             }
             catch (Exception ex)
             {
-                // Debug.WriteLine($"General error while loading recent publications: {ex.Message}");
+                Debug.WriteLine($"Exception: {ex.Message}");
+                // Handle general exceptions
                 txtNumberOfRecords.Text = "0";
                 txtPubsThisMonth.Text = "0";
                 txtAverageTime.Text = "0";
@@ -199,6 +198,22 @@ namespace IDT2025
             }
         }
 
+        private void ImpersonateAndLoadData()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+
+            try
+            {
+                WindowsIdentity.RunImpersonated(identity.AccessToken, async () =>
+                {
+                    await LoadRecentPublicationsAsync();
+                }).Wait();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception during impersonation: {ex.Message}");
+            }
+        }
     }
 
     public static class GridViewColumnExtensions
