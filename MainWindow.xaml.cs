@@ -1,5 +1,4 @@
-﻿using FontAwesome.WPF;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Management;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +6,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
+using MaterialDesignColors;
 
 namespace IDT2025
 {
@@ -49,7 +50,7 @@ namespace IDT2025
 
             switch (state)
             {
-                case 0:
+                case 0: // Sidebar open
                     if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Visible;
                     if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Visible;
                     if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Visible;
@@ -68,9 +69,15 @@ namespace IDT2025
 
                     // Adjust MainContent margin
                     MainContent.Margin = new Thickness(20, 0, 0, 0); // Adjust the left margin as needed
+
+                    // Change ToggleNavButton Kind to ArrowLeftBox
+                    if (ToggleNavButton != null)
+                    {
+                        ToggleNavButton.Kind = PackIconKind.ArrowLeftBox;
+                    }
                     break;
 
-                case 1:
+                case 1: // Sidebar partially closed
                     if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
                     if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
                     if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
@@ -90,7 +97,7 @@ namespace IDT2025
                     // Adjust MainContent margin
                     MainContent.Margin = new Thickness(-(SidebarWidth) + 20, 0, 0, 0); // Adjust the left margin as needed
                     break;
-                case 2:
+                case 2: // Sidebar closed
                     if (DashboardLabelCell != null) DashboardLabelCell.Visibility = Visibility.Collapsed;
                     if (PubAssistLabelCell != null) PubAssistLabelCell.Visibility = Visibility.Collapsed;
                     if (SingleFileLabelCell != null) SingleFileLabelCell.Visibility = Visibility.Collapsed;
@@ -109,6 +116,12 @@ namespace IDT2025
 
                     // Adjust MainContent margin
                     MainContent.Margin = new Thickness(-200, 0, 0, 0); // Adjust the left margin as needed
+
+                    // Change ToggleNavButton Kind to ArrowRightBox
+                    if (ToggleNavButton != null)
+                    {
+                        ToggleNavButton.Kind = PackIconKind.ArrowRightBox;
+                    }
                     break;
             }
         }
@@ -184,8 +197,8 @@ namespace IDT2025
 
         private void UpdateVpnIconColor(bool isConnected)
         {
-            var vpnIcon = MainGrid.FindName("VpnIcon") as ImageAwesome;
-            var topVpnIcon = MainGrid.FindName("TopVpnIcon") as ImageAwesome;
+            var vpnIcon = MainGrid.FindName("VpnIcon") as PackIcon;
+            var topVpnIcon = MainGrid.FindName("TopVpnIcon") as PackIcon;
             if (vpnIcon != null)
             {
                 vpnIcon.Foreground = isConnected ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00cc00")) : Brushes.Red;

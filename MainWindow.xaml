@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:IDT2025"
         mc:Ignorable="d"
         WindowStyle="None"
@@ -53,7 +53,7 @@
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="#171b22"/>
         </Style>
-        <Style x:Key="NavIcon" TargetType="fa:ImageAwesome">
+        <Style x:Key="NavIcon" TargetType="material:PackIcon">
             <Setter Property="Width" Value="28"/>
             <Setter Property="Height" Value="28"/>
             <Setter Property="Foreground" Value="White"/>
@@ -101,40 +101,40 @@
                                 <ColumnDefinition Width="10" />
                             </Grid.ColumnDefinitions>
                             <Button Style="{StaticResource appBtn}" Click="NavToggleButton_Click" Grid.Column="1">
-                                <fa:ImageAwesome Icon="Bars" Foreground="White" Width="20" Height="20"/>
+                                <material:PackIcon Kind="ArrowLeftBox" x:Name="ToggleNavButton" Foreground="White" Width="20" Height="20"/>
                             </Button>
                             <Label Content="InfoDev Tools" VerticalAlignment="Center" Foreground="White" FontSize="24" Padding="20,0,20,0" Grid.Column="2"/>
                             <StackPanel x:Name="TopNav" Orientation="Horizontal" HorizontalAlignment="Left" 
                                         VerticalAlignment="Center" Grid.Column="3" Margin="40,0,0,0" Visibility="Collapsed">
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Dashboard"
                                         Click="TopNavDashboardButton_Click">
-                                    <fa:ImageAwesome Icon="Dashboard" Style="{StaticResource NavIcon}"/>
+                                    <material:PackIcon Kind="GraphBar" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="PubAssist"
                                         Click="TopNavPubAssistButton_Click">
-                                    <fa:ImageAwesome Icon="CloudUpload" Style="{StaticResource NavIcon}"/>
+                                    <material:PackIcon Kind="CloudUpload" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Single File">
-                                    <fa:ImageAwesome Icon="Upload" Style="{StaticResource NavIcon}"/>
+                                    <material:PackIcon Kind="Upload" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Editor">
-                                    <fa:ImageAwesome Icon="PencilSquare" Style="{StaticResource NavIcon}"/>
+                                    <material:PackIcon Kind="Edit" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Settings">
-                                    <fa:ImageAwesome Icon="Gears" Style="{StaticResource NavIcon}"/>
+                                    <material:PackIcon Kind="Settings" Style="{StaticResource NavIcon}"/>
                                 </Button>
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,0,0" ToolTip="VPN Status">
-                                    <fa:ImageAwesome x:Name="TopVpnIcon" Icon="Plug" Style="{StaticResource NavIcon}"/>
+                                    <material:PackIcon Kind="Plug" x:Name="TopVpnIcon" Style="{StaticResource NavIcon}"/>
                                 </Button>
                             </StackPanel>
                             <Button Style="{StaticResource appBtn}" Click="MinimizeButton_Click" Grid.Column="5">
-                                <fa:ImageAwesome Icon="WindowMinimize" Foreground="White" Width="20" Height="20"/>
+                                <material:PackIcon Kind="WindowMinimize" Foreground="White" Width="20" Height="20"/>
                             </Button>
                             <Button Style="{StaticResource appBtn}" Click="MaximizeButton_Click" Grid.Column="6">
-                                <fa:ImageAwesome Icon="WindowMaximize" Foreground="White" Width="20" Height="20"/>
+                                <material:PackIcon Kind="WindowMaximize" Foreground="White" Width="20" Height="20"/>
                             </Button>
                             <Button Style="{StaticResource appBtn}" Click="CloseButton_Click" Grid.Column="7">
-                                <fa:ImageAwesome Icon="Close" Foreground="White" Width="20" Height="20"/>
+                                <material:PackIcon Kind="Close" Foreground="White" Width="20" Height="20"/>
                             </Button>
                         </Grid>
                     </Border>
@@ -159,7 +159,7 @@
 
                             <Border x:Name="DashboardIconCell" Style="{StaticResource NavIconCell}" ToolTip="Dashboard"
                                     MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown" Grid.Row="0" Grid.Column="0">
-                                <fa:ImageAwesome Icon="Dashboard" Style="{StaticResource NavIcon}"/>
+                                <material:PackIcon Kind="GraphBar" Style="{StaticResource NavIcon}"/>
                             </Border>
                             <Border x:Name="DashboardLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="0"
                                     MouseLeftButtonDown="DashboardIconCell_MouseLeftButtonDown">
@@ -169,7 +169,7 @@
 
                             <Border x:Name="PubAssistIconCell" Style="{StaticResource NavIconCell}" ToolTip="PubAssist"
                                     MouseLeftButtonDown="PubAssistIconCell_MouseLeftButtonDown" Grid.Row="1" Grid.Column="0" >
-                                <fa:ImageAwesome Icon="CloudUpload" Style="{StaticResource NavIcon}"/>
+                                <material:PackIcon Kind="CloudUpload" Style="{StaticResource NavIcon}"/>
                             </Border>
                             <Border x:Name="PubAssistLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="1"
                                     MouseLeftButtonDown="PubAssistIconCell_MouseLeftButtonDown" >
@@ -177,28 +177,28 @@
                             </Border>
 
                             <Border x:Name="SingleFileIconCell" Style="{StaticResource NavIconCell}" Grid.Row="2" Grid.Column="0" ToolTip="Single Files">
-                                <fa:ImageAwesome Icon="Upload" Style="{StaticResource NavIcon}"/>
+                                <material:PackIcon Kind="Upload" Style="{StaticResource NavIcon}"/>
                             </Border>
                             <Border x:Name="SingleFileLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="2">
                                 <Label Content="Single File" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
                             </Border>
 
                             <Border x:Name="EditorIconCell" Style="{StaticResource NavIconCell}" Grid.Row="3" Grid.Column="0" ToolTip="Editor">
-                                <fa:ImageAwesome Icon="PencilSquare" Style="{StaticResource NavIcon}"/>
+                                <material:PackIcon Kind="Edit" Style="{StaticResource NavIcon}"/>
                             </Border>
                             <Border x:Name="EditorLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="3">
                                 <Label Content="Editor" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
                             </Border>
 
                             <Border x:Name="SettingsIconCell" Style="{StaticResource NavIconCell}" Grid.Row="4" Grid.Column="0" ToolTip="Settings">
-                                <fa:ImageAwesome Icon="Gears" Style="{StaticResource NavIcon}"/>
+                                <material:PackIcon Kind="Settings" Style="{StaticResource NavIcon}"/>
                             </Border>
                             <Border x:Name="SettingsLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="4">
                                 <Label Content="Settings" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
                             </Border>
 
                             <Border x:Name="VpnIconCell" Style="{StaticResource NavIconCell}" Grid.Row="6" Grid.Column="0" ToolTip="VPN Status" Cursor="Arrow">
-                                <fa:ImageAwesome x:Name="VpnIcon" Icon="Plug" Style="{StaticResource NavIcon}" Foreground="{Binding IsVpnConnected, Converter={StaticResource VpnStatusToColorConverter}}"/>
+                                <material:PackIcon Kind="Plug" x:Name="VpnIcon" Style="{StaticResource NavIcon}" Foreground="{Binding IsVpnConnected, Converter={StaticResource VpnStatusToColorConverter}}"/>
                             </Border>
                             <Border x:Name="VpnLabelCell" Style="{StaticResource NavLabelCell}" Grid.Column="1" Grid.Row="6" Cursor="Arrow">
                                 <Label Content="VPN Status" VerticalAlignment="Center" Style="{StaticResource NavLabel}"/>
