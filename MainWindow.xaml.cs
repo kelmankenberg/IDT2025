@@ -167,6 +167,9 @@ namespace IDT2025
         private void CheckVpnStatus()
         {
             bool isConnected = false;
+            VpnIcon.ToolTip = "VPN Disconnected"; // Set the default tooltip
+            TopVpnIcon.ToolTip = "VPN Disconnected"; // Set the default tooltip
+            VpnIconCell.ToolTip = "VPN Disconnected"; // Set the default tooltip
 
             // Use WMI to check VPN connection status
             var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionID != NULL");
@@ -184,6 +187,9 @@ namespace IDT2025
                     netConnectionStatus == "2")
                 {
                     isConnected = true;
+                    VpnIcon.ToolTip = "VPN Connected"; // Update the tooltip
+                    TopVpnIcon.ToolTip = "VPN Connected"; // Update the tooltip
+                    VpnIconCell.ToolTip = "VPN Connected"; // Update the tooltip
                     break;
                 }
             }
