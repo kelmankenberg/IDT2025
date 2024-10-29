@@ -11,6 +11,7 @@
         Background="Transparent"
         Title="InfoDev Tools" Height="800" Width="1200"
         MinWidth="1200" MinHeight="800"
+        Icon="pack://application:,,,/images/IDT.ico"
         WindowStartupLocation="CenterScreen"
         StateChanged="Window_StateChanged">
     <Window.Resources>

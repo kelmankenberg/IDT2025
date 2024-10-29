@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using MaterialDesignColors;
@@ -28,6 +29,7 @@ namespace IDT2025
         {
             InitializeComponent();
             this.DataContext = this;
+            this.Icon = new BitmapImage(new Uri("pack://application:,,,/images/IDT.ico"));
             currentVersion = GetFileVersion();
             TitleVersionValue.Text = $"  v{currentVersion}";
             _viewModel = new MainViewModel();
@@ -134,7 +136,7 @@ namespace IDT2025
                 else
                 {
                     // Debug.WriteLine($"Failed to check for updates. HTTP Status: {response.StatusCode} - {response.ReasonPhrase}");
-                    MessageBox.Show($"Failed to check for updates. HTTP Status: {response.StatusCode} - {response.ReasonPhrase}. URL: {updateUrl}", "Update Check", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Failed to check for updates. HTTP Status: {response.StatusCode} - {response.ReasonPhrase}. URL: {updateUrl}\n\nPlease check your VPN connection and try again.", "Update Check", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
