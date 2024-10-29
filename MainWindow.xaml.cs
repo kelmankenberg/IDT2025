@@ -1,13 +1,17 @@
 ﻿using System.Diagnostics;
 using System.Management;
+using System.Net.Http;
+using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using MaterialDesignThemes.Wpf;
 using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 
 namespace IDT2025
 {
@@ -17,10 +21,15 @@ namespace IDT2025
         private const double SidebarWidth = 150;
         private MainViewModel _viewModel;
         private DispatcherTimer _vpnCheckTimer;
+        public string AppVersion { get; set; }
+        private readonly string currentVersion = "";
 
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
+            currentVersion = GetFileVersion();
+            TitleVersionValue.Text = $"  v{currentVersion}";
             _viewModel = new MainViewModel();
             DataContext = _viewModel;
             // Set the default toggle state to case 0 on startup
@@ -37,6 +46,130 @@ namespace IDT2025
             LoadUserSettings();
 
             LoadDashboard();
+
+            CheckForUpdatesAsync(); // Call CheckForUpdatesAsync when the window is loaded
+            StartUpdateCheck();
+        }
+
+        private string GetFileVersion()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return fileVersionInfo.FileVersion;
+        }
+
+        private void StartUpdateCheck()
+        {
+            var updateTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromHours(1) // Check every hour
+            };
+            updateTimer.Tick += async (sender, e) => await CheckForUpdatesAsync();
+            updateTimer.Start();
+        }
+
+        private async Task CheckForUpdatesAsync()
+        {
+            // Debug.WriteLine("Starting CheckForUpdatesAsync...");
+            string updateUrl = "https://dev-documentation.wolterskluwerfs.com/IDT/update.json";
+            try
+            {
+                var handler = new HttpClientHandler
+                {
+                    UseDefaultCredentials = true // Use the current user's Windows credentials
+                };
+
+                using HttpClient client = new HttpClient(handler);
+
+                // Debug.WriteLine("Sending HTTP GET request...");
+                HttpResponseMessage response = await client.GetAsync(updateUrl);
+                // Debug.WriteLine($"HTTP response received. Status code: {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string updateInfo = await response.Content.ReadAsStringAsync();
+                    // Debug.WriteLine($"Update info received: {updateInfo}");
+
+                    if (!string.IsNullOrEmpty(updateInfo))
+                    {
+                        try
+                        {
+                            // Debug.WriteLine("Attempting to deserialize JSON...");
+                            var updateData = System.Text.Json.JsonSerializer.Deserialize<UpdateInfo>(updateInfo);
+                            // Debug.WriteLine("JSON deserialization successful.");
+
+                            if (updateData != null)
+                            {
+                                // Debug.WriteLine($"Latest version available: {updateData.LatestVersion}");
+                                //MessageBox.Show($"Latest version available: {updateData.LatestVersion}", "Update Check", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                                if (IsNewVersionAvailable(updateData.LatestVersion))
+                                {
+                                    // Debug.WriteLine("New version is available. Notifying user...");
+                                    NotifyUserOfUpdate(updateData);
+                                }
+                                else
+                                {
+                                    // Debug.WriteLine("No new version available.");
+                                }
+                            }
+                            else
+                            {
+                                // Debug.WriteLine("Deserialized update data is null.");
+                                MessageBox.Show("Failed to parse update information.", "Update Check", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                        catch (System.Text.Json.JsonException jsonEx)
+                        {
+                            // Debug.WriteLine($"JSON deserialization error: {jsonEx.Message}");
+                            MessageBox.Show($"JSON deserialization error: {jsonEx.Message}", "Update Check", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    else
+                    {
+                        // Debug.WriteLine("Update information is empty.");
+                        MessageBox.Show("Update information is empty.", "Update Check", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    // Debug.WriteLine($"Failed to check for updates. HTTP Status: {response.StatusCode} - {response.ReasonPhrase}");
+                    MessageBox.Show($"Failed to check for updates. HTTP Status: {response.StatusCode} - {response.ReasonPhrase}. URL: {updateUrl}", "Update Check", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Debug.WriteLine($"Error checking for updates: {ex.Message}");
+                MessageBox.Show($"Error checking for updates: {ex.Message}. URL: {updateUrl}", "Update Check", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            // Debug.WriteLine("CheckForUpdatesAsync completed.");
+        }
+
+
+
+        private bool IsNewVersionAvailable(string latestVersion)
+        {
+            Version current = new Version(currentVersion);
+            Version latest = new Version(latestVersion);
+            return latest > current;
+        }
+
+        private void NotifyUserOfUpdate(UpdateInfo updateData)
+        {
+            MessageBoxResult result = MessageBox.Show(
+                $"A new version ({updateData.LatestVersion}) is available. Would you like to download it?",
+                "Update Available",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = updateData.DownloadUrl,
+                    UseShellExecute = true
+                });
+            }
         }
 
         private void ApplyToggleState(int state)
@@ -345,6 +478,36 @@ namespace IDT2025
             }
         }
 
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (HelpButton.ContextMenu != null)
+            {
+                HelpButton.ContextMenu.PlacementTarget = HelpButton;
+                HelpButton.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                HelpButton.ContextMenu.IsOpen = true;
+            }
+        }
+
+        private void ViewHelp_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("View Help clicked.");
+        }
+
+        private void ReleaseNotes_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://dev-documentation.wolterskluwerfs.com/IDT/ReleaseNotes/index.html";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("About IDT2025 clicked.");
+        }
+
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -378,5 +541,17 @@ namespace IDT2025
                 MessageBox.Show("DashboardLabelCell not found.");
             }
         }
+    }
+
+    class UpdateInfo
+    {
+        [JsonPropertyName("latestVersion")]
+        public string LatestVersion { get; set; }
+
+        [JsonPropertyName("downloadUrl")]
+        public string DownloadUrl { get; set; }
+
+        [JsonPropertyName("releaseNotes")]
+        public string ReleaseNotes { get; set; }
     }
 }

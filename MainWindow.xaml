@@ -103,7 +103,13 @@
                             <Button Style="{StaticResource appBtn}" Click="NavToggleButton_Click" Grid.Column="1">
                                 <material:PackIcon Kind="ArrowLeftBox" x:Name="ToggleNavButton" Foreground="White" Width="20" Height="20"/>
                             </Button>
-                            <Label Content="InfoDev Tools" VerticalAlignment="Center" Foreground="White" FontSize="24" Padding="20,0,20,0" Grid.Column="2"/>
+                            <Label VerticalAlignment="Center" Foreground="White" FontSize="24" Padding="20,0,20,0" Grid.Column="2">
+                                <TextBlock>
+                                    <Run Text="InfoDev Tools"/>
+                                    <Run x:Name="TitleVersionValue" FontSize="12"/>
+                                </TextBlock>
+                            </Label>
+
                             <StackPanel x:Name="TopNav" Orientation="Horizontal" HorizontalAlignment="Left" 
                                         VerticalAlignment="Center" Grid.Column="3" Margin="40,0,0,0" Visibility="Collapsed">
                                 <Button Style="{StaticResource appBtn}" Margin="0,0,20,0" ToolTip="Dashboard"
@@ -127,6 +133,16 @@
                                     <material:PackIcon Kind="Plug" x:Name="TopVpnIcon" Style="{StaticResource NavIcon}"/>
                                 </Button>
                             </StackPanel>
+                            <Button x:Name="HelpButton" Style="{StaticResource appBtn}" Click="HelpButton_Click" Grid.Column="4">
+                                <material:PackIcon Kind="Help" Foreground="White" Width="20" Height="20"/>
+                                <Button.ContextMenu>
+                                    <ContextMenu x:Name="HelpContextMenu">
+                                        <MenuItem Header="View Help" Click="ViewHelp_Click"/>
+                                        <MenuItem Header="Release Notes" Click="ReleaseNotes_Click"/>
+                                        <MenuItem Header="About IDT2025" Click="About_Click"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
                             <Button Style="{StaticResource appBtn}" Click="MinimizeButton_Click" Grid.Column="5">
                                 <material:PackIcon Kind="WindowMinimize" Foreground="White" Width="20" Height="20"/>
                             </Button>

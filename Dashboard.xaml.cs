@@ -93,7 +93,7 @@ namespace IDT2025
 
         private async void Dashboard_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Dashboard Loaded");
+            //Debug.WriteLine("Dashboard Loaded");
             await LoadRecentPublicationsAsync();
         }
 
@@ -101,7 +101,7 @@ namespace IDT2025
         {
             // Use a mapped drive path
             string connectionString = @"Data Source=Y:\idt\InfoDevTools.db;Version=3;";
-            Debug.WriteLine($"Using connection string: {connectionString}");
+            //Debug.WriteLine($"Using connection string: {connectionString}");
 
             try
             {
@@ -109,14 +109,14 @@ namespace IDT2025
                 using (var connection = new SQLiteConnection(connectionString))
                 {
                     await connection.OpenAsync();
-                    Debug.WriteLine("SQLite connection opened.");
+                    //Debug.WriteLine("SQLite connection opened.");
 
                     string query = "SELECT Profile, Date, Server, Start, End, Total, Owner FROM RecentPublications";
                     using (var command = new SQLiteCommand(query, connection))
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         var recentPublications = new List<RecentPublication>();
-                        Debug.WriteLine("Executing query...");
+                        //Debug.WriteLine("Executing query...");
 
                         while (await reader.ReadAsync())
                         {
@@ -131,12 +131,12 @@ namespace IDT2025
                                 Owner = reader["Owner"]?.ToString() ?? string.Empty
                             };
                             recentPublications.Add(publication);
-                            Debug.WriteLine($"Loaded publication: {publication.Profile}, {publication.Date}");
+                            //Debug.WriteLine($"Loaded publication: {publication.Profile}, {publication.Date}");
                         }
 
                         if (recentPublications.Count == 0)
                         {
-                            Debug.WriteLine("No recent publications found.");
+                            //Debug.WriteLine("No recent publications found.");
                             txtNumberOfRecords.Text = "0";
                             txtPubsThisMonth.Text = "0";
                             txtAverageTime.Text = "0";
@@ -144,7 +144,7 @@ namespace IDT2025
                         }
                         else
                         {
-                            Debug.WriteLine($"Loaded {recentPublications.Count} publications.");
+                            //Debug.WriteLine($"Loaded {recentPublications.Count} publications.");
                             RecentPubsListview.ItemsSource = recentPublications;
                             txtNumberOfRecords.Text = recentPublications.Count.ToString();
 
