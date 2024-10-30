@@ -45,8 +45,8 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;C:\dev\IDT2025\InnoSetup\IDT2025Setup.iss&quot; " />
-  </Target>
+  </Target>-->
 
 </Project>

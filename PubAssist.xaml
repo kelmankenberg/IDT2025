@@ -17,26 +17,121 @@
         </Style>
         <Style x:Key="Titlebar" TargetType="Border">
             <Setter Property="Background" Value="#7290b7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10,10,0,0"/>
+        </Style>
+        <Style x:Key="TextboxLabel" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="0,5,5,0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TitlebarButtonRt" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="0,10,0,0" Margin="0,0,2,0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="Textbox" TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="5">
+                            <Grid>
+                                <!--<ScrollViewer x:Name="PART_ContentHost" Margin="0,0,50,0"/>-->
+                                <Button Content="..." Width="30" Height="30" 
+                                HorizontalAlignment="Right" VerticalAlignment="Stretch" 
+                                Margin="0" Padding="0" 
+                                Style="{StaticResource RoundedButton}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TextBoxNoButton" TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
     <Border x:Name="PubAssistMainContainer" Style="{StaticResource PubAssistMainContainerStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="120"/>
-                <!-- Fixed height for card row -->
                 <RowDefinition Height="*"/>
-                <!-- New row for Recent Publications -->
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
             <TextBlock x:Name="HeadingText" FontSize="24" Margin="10" 
-                Foreground="{StaticResource HeadingTextColor}" Grid.Row="0">
+                Foreground="{StaticResource HeadingTextColor}" Grid.Row="0" Grid.ColumnSpan="2">
                     <Run Text="PubAssist"/>
                     <Run Text="       Here you can create, edit and publish content profiles." FontSize="16"/>
             </TextBlock>
-            
-            <Border Grid.Row="1" CornerRadius="10" BorderBrush="Gray" BorderThickness="1" Margin="10">
+
+            <!-- Profiles Container -->
+            <Border Grid.Row="1" Grid.Column="0" CornerRadius="10" BorderBrush="Gray" BorderThickness="1" Margin="10">
                 <StackPanel>
-                    <Border Grid.Row="0" Style="{StaticResource Titlebar}">
+                    <Border Style="{StaticResource Titlebar}">
                         <TextBlock Text="Profiles" FontSize="18" FontWeight="Bold" 
                                Padding="5" Foreground="White"/>
                     </Border>
@@ -44,13 +139,64 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
-                                <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}" Width="200"/>
-                                <GridViewColumn Header="Server" DisplayMemberBinding="{Binding Server}" Width="200"/>
-                                <GridViewColumn Header="Project" DisplayMemberBinding="{Binding Project}" Width="200"/>
-                                <GridViewColumn Header="Ditamap" DisplayMemberBinding="{Binding Ditamap}" Width="200"/>
+                                <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}" Width="20"/>
+                                <GridViewColumn Header="Server" DisplayMemberBinding="{Binding Server}" Width="20"/>
+                                <GridViewColumn Header="Project" DisplayMemberBinding="{Binding Project}" Width="20"/>
+                                <GridViewColumn Header="Ditamap" DisplayMemberBinding="{Binding Ditamap}" Width="20"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
+                </StackPanel>
+            </Border>
+
+            <!-- Profile Details Container -->
+            <Border Grid.Row="1" Grid.Column="1" CornerRadius="10" BorderBrush="Gray" BorderThickness="1" Margin="10">
+                <StackPanel>
+                    <Border Style="{StaticResource Titlebar}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="ProfileDetailsTitlebar" Text="Profile Details" FontSize="18" FontWeight="Bold" 
+                                    Padding="5" Foreground="White" VerticalAlignment="Center" Grid.Column="0"/>
+                            <Button Content="Add/Update" Width="100" Height="30" 
+                                    HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                    Style="{StaticResource TitlebarButtonRt}" Grid.Column="1"/>
+                        </Grid>
+                    </Border>
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
+
+                        <TextBlock Text="Source:" Grid.Row="1" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource Textbox}"/>
+
+                        <TextBlock Text="Target:" Grid.Row="2" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource Textbox}"/>
+
+                        <TextBlock Text="Project:" Grid.Row="3" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource Textbox}"/>
+
+                        <TextBlock Text="Ditamap:" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource Textbox}"/>
+
+                        <TextBlock Text="Owner:" Grid.Row="5" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                        <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
+                    </Grid>
                 </StackPanel>
             </Border>
         </Grid>
