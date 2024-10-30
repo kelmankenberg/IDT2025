@@ -12,12 +12,12 @@ namespace IDT2025
 {
     public class Profile
     {
-        public string Name { get; set; }
-        public string Source { get; set; }
-        public string Server { get; set; }
-        public string Project { get; set; }
-        public string Ditamap { get; set; }
-        public string Owner { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Source { get; set; } = string.Empty;
+        public string Server { get; set; } = string.Empty;
+        public string Project { get; set; } = string.Empty;
+        public string Ditamap { get; set; } = string.Empty;
+        public string Owner { get; set; } = string.Empty;
     }
 
     public class ProfilesData
@@ -113,7 +113,41 @@ namespace IDT2025
             }
         }
 
+        // Update the SourceBrowseButton_Click method
+        private void SourceBrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                CheckFileExists = false,
+                FileName = "Select Folder",
+                Filter = "Folders|no.files",
+                Title = "Select Folder"
+            };
 
+            if (dialog.ShowDialog() == true)
+            {
+                string folderPath = Path.GetDirectoryName(dialog.FileName);
+                ProfileDetailsSource.Text = folderPath;
+            }
+        }
+
+
+        private void TargetBrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                CheckFileExists = false,
+                FileName = "Select Folder",
+                Filter = "Folders|no.files",
+                Title = "Select Folder"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                string folderPath = Path.GetDirectoryName(dialog.FileName);
+                ProfileDetailsTarget.Text = folderPath;
+            }
+        }
 
 
         private async Task LoadProfilesAsync()
@@ -137,10 +171,10 @@ namespace IDT2025
                             {
                                 profiles.Add(new Profile
                                 {
-                                    Name = reader["Name"].ToString(),
-                                    Source = reader["Source"].ToString(),
-                                    Server = reader["Target"].ToString(),
-                                    Owner = reader["Owner"].ToString()
+                                    Name = reader["Name"]?.ToString() ?? string.Empty,
+                                    Source = reader["Source"]?.ToString() ?? string.Empty,
+                                    Server = reader["Target"]?.ToString() ?? string.Empty,
+                                    Owner = reader["Owner"]?.ToString() ?? string.Empty
                                 });
                             }
 
@@ -155,5 +189,37 @@ namespace IDT2025
             }
         }
 
+        private void ProfileToolsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("ProfileToolsButton_Click: Button clicked");
+
+            if (ProfileToolsButton.ContextMenu != null)
+            {
+                Debug.WriteLine("ProfileToolsButton_Click: ContextMenu is not null");
+                ProfileToolsButton.ContextMenu.PlacementTarget = ProfileToolsButton;
+                ProfileToolsButton.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                ProfileToolsButton.ContextMenu.IsOpen = true;
+                Debug.WriteLine("ProfileToolsButton_Click: ContextMenu opened");
+            }
+            else
+            {
+                Debug.WriteLine("ProfileToolsButton_Click: ContextMenu is null");
+            }
+        }
+
+        private void AddNewProfile_Click(object sender, RoutedEventArgs e)
+        {
+            // Add logic to add a new profile
+        }
+
+        private void DuplicateProfile_Click(object sender, RoutedEventArgs e)
+        {
+            // Add logic to duplicate a profile
+        }
+
+        private void DeleteProfile_Click(object sender, RoutedEventArgs e)
+        {
+            // Add logic to delete a profile
+        }
     }
 }

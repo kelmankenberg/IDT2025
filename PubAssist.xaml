@@ -59,7 +59,7 @@
             <Setter Property="BorderBrush" Value="#80FFFFFF"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        <Style x:Key="Textbox" TargetType="TextBox">
+        <Style x:Key="TextboxSource" TargetType="TextBox">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="5"/>
@@ -80,7 +80,37 @@
                                 <Button Content="..." Width="30" Height="30" 
                                 HorizontalAlignment="Right" VerticalAlignment="Stretch" 
                                 Margin="0" Padding="0" 
-                                Style="{StaticResource RoundedButton}"/>
+                                Style="{StaticResource RoundedButton}"
+                                Click="SourceBrowseButton_Click"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TextboxTarget" TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="5">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,50,0"/>
+                                <Button Content="..." Width="30" Height="30" 
+                                HorizontalAlignment="Right" VerticalAlignment="Stretch" 
+                                Margin="0" Padding="0" 
+                                Style="{StaticResource RoundedButton}"
+                                Click="TargetBrowseButton_Click"/>
                             </Grid>
                         </Border>
                     </ControlTemplate>
@@ -130,6 +160,11 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <ContextMenu x:Key="ProfileToolsMenu">
+            <MenuItem Header="Add New Profile" Click="AddNewProfile_Click"/>
+            <MenuItem Header="Duplicate" Click="DuplicateProfile_Click"/>
+            <MenuItem Header="Delete" Click="DeleteProfile_Click"/>
+        </ContextMenu>
     </UserControl.Resources>
     <Border x:Name="PubAssistMainContainer" Style="{StaticResource PubAssistMainContainerStyle}">
         <Grid>
@@ -142,22 +177,32 @@
                 <ColumnDefinition Width="1.75*" />
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="HeadingText" FontSize="24" Margin="10" 
-                Foreground="{StaticResource HeadingTextColor}" Grid.Row="0" Grid.ColumnSpan="2">
-                    <Run Text="PubAssist"/>
-                    <Run Text="       Here you can create, edit and publish content profiles." FontSize="16"/>
+            Foreground="{StaticResource HeadingTextColor}" Grid.Row="0" Grid.ColumnSpan="2">
+                <Run Text="PubAssist"/>
+                <Run Text="       Here you can create, edit and publish content profiles." FontSize="16"/>
             </TextBlock>
 
             <!-- Profiles Container -->
             <Border Grid.Row="1" Grid.Column="0" CornerRadius="10" BorderBrush="Gray" BorderThickness="1" Margin="10">
                 <StackPanel>
                     <Border Style="{StaticResource Titlebar}">
-                        <TextBlock Text="Profiles" FontSize="18" FontWeight="Bold" 
-                               Padding="5" Foreground="White"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Profiles" FontSize="18" FontWeight="Bold" 
+                                    Padding="5" Foreground="White" VerticalAlignment="Center" Grid.Column="0"/>
+                            <Button x:Name="ProfileToolsButton" Content="Profile Tools" Width="100" Height="30" 
+                                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                Style="{StaticResource TitlebarButtonRt}" Grid.Column="1"
+                                ContextMenu="{StaticResource ProfileToolsMenu}" Click="ProfileToolsButton_Click"/>
+                        </Grid>
                     </Border>
                     <ListView Name="ProfilesListView" Margin="5" Background="Transparent" 
-                              ItemContainerStyle="{StaticResource ListViewItemStyle}" 
-                              SelectionChanged="ProfilesListView_SelectionChanged"
-                              BorderThickness="0">
+              ItemContainerStyle="{StaticResource ListViewItemStyle}" 
+              SelectionChanged="ProfilesListView_SelectionChanged"
+              BorderThickness="0">
                         <ListView.Resources>
                             <Style TargetType="GridViewColumnHeader">
                                 <Setter Property="Height" Value="0"/>
@@ -173,7 +218,6 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-
                 </StackPanel>
             </Border>
 
@@ -187,11 +231,11 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="ProfileDetailsTitlebar" Text="Profile Details" FontSize="18" FontWeight="Bold" 
-                                    Padding="5" Foreground="White" VerticalAlignment="Center" Grid.Column="0"/>
-                            <Button Content="Add/Update" Width="100" Height="30" 
-                                    HorizontalAlignment="Right" VerticalAlignment="Center" 
-                                    Style="{StaticResource TitlebarButtonRt}" Grid.Column="1"
-                                    Click="AddUpdateButton_Click"/>
+                                Padding="5" Foreground="White" VerticalAlignment="Center" Grid.Column="0"/>
+                            <Button x:Name="AddUpdateProfileButton" Content="Add/Update" Width="100" Height="30" 
+                                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                Style="{StaticResource TitlebarButtonRt}" Grid.Column="1"
+                                Click="AddUpdateButton_Click"/>
                         </Grid>
                     </Border>
                     <Grid Margin="5">
@@ -212,16 +256,16 @@
                         <TextBox x:Name="ProfileDetailsName" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
 
                         <TextBlock Text="Source:" Grid.Row="1" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox x:Name="ProfileDetailsSource" Grid.Row="1" Grid.Column="1" Style="{StaticResource Textbox}"/>
+                        <TextBox x:Name="ProfileDetailsSource" Grid.Row="1" Grid.Column="1" Style="{StaticResource TextboxSource}"/>
 
                         <TextBlock Text="Target:" Grid.Row="2" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox x:Name="ProfileDetailsTarget" Grid.Row="2" Grid.Column="1" Style="{StaticResource Textbox}"/>
+                        <TextBox x:Name="ProfileDetailsTarget" Grid.Row="2" Grid.Column="1" Style="{StaticResource TextboxTarget}"/>
 
                         <!--<TextBlock Text="Project:" Grid.Row="3" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource Textbox}"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource Textbox}"/>
 
-                        <TextBlock Text="Ditamap:" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource Textbox}"/>-->
+                    <TextBlock Text="Ditamap:" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource Textbox}"/>-->
 
                         <TextBlock Text="Owner:" Grid.Row="5" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
                         <TextBox x:Name="ProfileDetailsOwner" Grid.Row="5" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
