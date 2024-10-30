@@ -4,6 +4,9 @@
 bin/
 obj/
 
+# Ignmore the Output folder
+Output/
+
 # Ignore additional folders that may also contain transient data
 *.user
 *.suo
@@ -12,3 +15,6 @@ obj/
 
 # Ignore package manager folders (for example, NuGet)
 packages/
+
+# Ignore the InnoSetup\Output folder but keep the InnoSetup folder
+InnoSetup/Output/

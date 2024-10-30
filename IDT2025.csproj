@@ -9,6 +9,8 @@
     <Platforms>AnyCPU;x64</Platforms>
     <FileVersion>0.0.5</FileVersion>
     <ApplicationIcon>images\IDT.ico</ApplicationIcon>
+    <OutputPath>$(SolutionDir)Output\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,5 +38,15 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="InnoSetup\IDT2025Setup.iss">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;C:\dev\IDT2025\InnoSetup\IDT2025Setup.iss&quot; " />
+  </Target>
 
 </Project>
