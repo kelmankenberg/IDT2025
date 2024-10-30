@@ -4,6 +4,9 @@
 ;    <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;C:\dev\IDT2025\InnoSetup\IDT2025Setup.iss&quot; " />
 ;  </Target>
 
+#define ReleaseFolder "C:\dev\IDT2025\Output"
+
+
 [Setup]
 AppId={{FCA5CC62-1A3A-4504-995C-629BFF1F6E41}}
 AppName=IDT2025
@@ -27,7 +30,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 ; Include all files in the Output directory except the InnoSetup folder
-Source: "Output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#ReleaseFolder}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Exclude the InnoSetup folder
 ;Source: "Output\InnoSetup\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "Output\InnoSetup\*"
 
