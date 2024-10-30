@@ -56,6 +56,7 @@
             <Setter Property="Padding" Value="5"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <!--<Setter Property="BorderBrush" Value="#7290b7"/>-->
             <!--<Setter Property="BorderThickness" Value="1"/>-->
             <Style.Triggers>
@@ -168,6 +169,13 @@
             </Grid>
             <Border x:Name="RecentPublications" Grid.Row="2" Grid.ColumnSpan="5">
                 <Grid x:Name="ListViewGrid" Margin="0">
+                    <!--<Grid.Background>
+                        <VisualBrush Opacity="0.5">
+                            <VisualBrush.Visual>
+                                <Image Source="pack://application:,,,/IDT2025;component/images/white-dots-blue-bg.jpg" Stretch="UniformToFill"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Grid.Background>-->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
                         <!-- Fixed height for title bar -->
@@ -180,43 +188,48 @@
                     </Border>
                     <ListView x:Name="RecentPubsListview" Grid.Row="1" Background="Transparent" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                         <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Profile" DisplayMemberBinding="{Binding Profile}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                            <GridView x:Name="RecentPubsGridView">
+                                <GridViewColumn Header="Profile" x:Name="ProfileColumn">
                                     <GridViewColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <GridViewColumnHeader Content="Profile" Click="GridViewColumnHeader_Click"/>
                                         </DataTemplate>
                                     </GridViewColumn.HeaderTemplate>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Profile}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="Auto">
                                     <GridViewColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <GridViewColumnHeader Content="Date" Click="GridViewColumnHeader_Click"/>
                                         </DataTemplate>
                                     </GridViewColumn.HeaderTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Server" DisplayMemberBinding="{Binding Server}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                <GridViewColumn Header="Server" DisplayMemberBinding="{Binding Server}" Width="Auto">
                                     <GridViewColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <GridViewColumnHeader Content="Server" Click="GridViewColumnHeader_Click"/>
                                         </DataTemplate>
                                     </GridViewColumn.HeaderTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Start" DisplayMemberBinding="{Binding Start}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                <GridViewColumn Header="Start" DisplayMemberBinding="{Binding Start}" Width="Auto">
                                     <GridViewColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <GridViewColumnHeader Content="Start" Click="GridViewColumnHeader_Click"/>
                                         </DataTemplate>
                                     </GridViewColumn.HeaderTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="End" DisplayMemberBinding="{Binding End}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                <GridViewColumn Header="End" DisplayMemberBinding="{Binding End}" Width="Auto">
                                     <GridViewColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <GridViewColumnHeader Content="End" Click="GridViewColumnHeader_Click"/>
                                         </DataTemplate>
                                     </GridViewColumn.HeaderTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Total" DisplayMemberBinding="{Binding Total}" Width="100" local:GridViewColumnExtensions.AutoWidth="True">
+                                <GridViewColumn Header="Total" DisplayMemberBinding="{Binding Total}" Width="Auto">
                                     <GridViewColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <GridViewColumnHeader Content="Total" Click="GridViewColumnHeader_Click"/>

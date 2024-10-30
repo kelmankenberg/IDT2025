@@ -14,7 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\white-dots-blue-bg.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="images\IDT.ico" />
+    <Resource Include="images\white-dots-blue-bg.jpg" />
   </ItemGroup>
 
   <ItemGroup>

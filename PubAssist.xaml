@@ -59,7 +59,6 @@
             <Setter Property="BorderBrush" Value="#80FFFFFF"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-
         <Style x:Key="Textbox" TargetType="TextBox">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5"/>
@@ -69,7 +68,6 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="#80FFFFFF"/>
             <Setter Property="CaretBrush" Value="White"/>
-            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -78,7 +76,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}" 
                         CornerRadius="5">
                             <Grid>
-                                <!--<ScrollViewer x:Name="PART_ContentHost" Margin="0,0,50,0"/>-->
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,50,0"/>
                                 <Button Content="..." Width="30" Height="30" 
                                 HorizontalAlignment="Right" VerticalAlignment="Stretch" 
                                 Margin="0" Padding="0" 
@@ -111,6 +109,27 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <!--<Setter Property="BorderBrush" Value="#7290b7"/>-->
+            <!--<Setter Property="BorderThickness" Value="1"/>-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#7290b7"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#4a6a8a"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Border x:Name="PubAssistMainContainer" Style="{StaticResource PubAssistMainContainerStyle}">
         <Grid>
@@ -120,7 +139,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1.75*" />
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="HeadingText" FontSize="24" Margin="10" 
                 Foreground="{StaticResource HeadingTextColor}" Grid.Row="0" Grid.ColumnSpan="2">
@@ -135,17 +154,26 @@
                         <TextBlock Text="Profiles" FontSize="18" FontWeight="Bold" 
                                Padding="5" Foreground="White"/>
                     </Border>
-                    <ListView Name="ProfilesListView" Margin="5">
+                    <ListView Name="ProfilesListView" Margin="5" Background="Transparent" 
+                              ItemContainerStyle="{StaticResource ListViewItemStyle}" 
+                              SelectionChanged="ProfilesListView_SelectionChanged"
+                              BorderThickness="0">
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Height" Value="0"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </Style>
+                        </ListView.Resources>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
-                                <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}" Width="20"/>
-                                <GridViewColumn Header="Server" DisplayMemberBinding="{Binding Server}" Width="20"/>
-                                <GridViewColumn Header="Project" DisplayMemberBinding="{Binding Project}" Width="20"/>
-                                <GridViewColumn Header="Ditamap" DisplayMemberBinding="{Binding Ditamap}" Width="20"/>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
+                                <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}" Width="0"/>
+                                <GridViewColumn Header="Target" DisplayMemberBinding="{Binding Server}" Width="0"/>
+                                <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding Ditamap}" Width="0"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
+
                 </StackPanel>
             </Border>
 
@@ -162,7 +190,8 @@
                                     Padding="5" Foreground="White" VerticalAlignment="Center" Grid.Column="0"/>
                             <Button Content="Add/Update" Width="100" Height="30" 
                                     HorizontalAlignment="Right" VerticalAlignment="Center" 
-                                    Style="{StaticResource TitlebarButtonRt}" Grid.Column="1"/>
+                                    Style="{StaticResource TitlebarButtonRt}" Grid.Column="1"
+                                    Click="AddUpdateButton_Click"/>
                         </Grid>
                     </Border>
                     <Grid Margin="5">
@@ -180,22 +209,22 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
+                        <TextBox x:Name="ProfileDetailsName" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
 
                         <TextBlock Text="Source:" Grid.Row="1" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource Textbox}"/>
+                        <TextBox x:Name="ProfileDetailsSource" Grid.Row="1" Grid.Column="1" Style="{StaticResource Textbox}"/>
 
                         <TextBlock Text="Target:" Grid.Row="2" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource Textbox}"/>
+                        <TextBox x:Name="ProfileDetailsTarget" Grid.Row="2" Grid.Column="1" Style="{StaticResource Textbox}"/>
 
-                        <TextBlock Text="Project:" Grid.Row="3" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
+                        <!--<TextBlock Text="Project:" Grid.Row="3" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
                         <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource Textbox}"/>
 
                         <TextBlock Text="Ditamap:" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource Textbox}"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource Textbox}"/>-->
 
                         <TextBlock Text="Owner:" Grid.Row="5" Grid.Column="0" Style="{StaticResource TextboxLabel}"/>
-                        <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
+                        <TextBox x:Name="ProfileDetailsOwner" Grid.Row="5" Grid.Column="1" Style="{StaticResource TextBoxNoButton}"/>
                     </Grid>
                 </StackPanel>
             </Border>
