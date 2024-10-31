@@ -233,8 +233,19 @@ namespace IDT2025
 
         private void AddNewProfile_Click(object sender, RoutedEventArgs e)
         {
-            // Add logic to add a new profile
+            // 1. Deselect any selected profile in the ProfilesListView
+            ProfilesListView.SelectedItem = null;
+
+            // 2. Clear all text boxes in Profile Details
+            ProfileDetailsName.Text = string.Empty;
+            ProfileDetailsSource.Text = string.Empty;
+            ProfileDetailsTarget.Text = string.Empty;
+            ProfileDetailsOwner.Text = string.Empty;
+
+            // 3. Set focus to ProfileDetailsName
+            ProfileDetailsName.Focus();
         }
+
 
         private void DuplicateProfile_Click(object sender, RoutedEventArgs e)
         {
